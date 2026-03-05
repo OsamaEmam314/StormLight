@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.StormLight" parent="android:Theme.Material.Light.NoActionBar" />
+<style name="Theme.StormLight" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.StormLight.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#FF101C22</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="windowSplashScreenIconBackgroundColor">#FF101C22</item>
+        <item name="postSplashScreenTheme">@style/Theme.StormLight</item>
+    </style>
 </resources>
