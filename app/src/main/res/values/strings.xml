@@ -1,3 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">StormLight</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_alerts">Alerts</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Home Screen -->
+    <string name="label_hourly">Hourly</string>
+    <string name="label_5day">5-Day Outlook</string>
+    <string name="label_humidity">Humidity</string>
+    <string name="label_wind">Wind</string>
+    <string name="label_pressure">Pressure</string>
+    <string name="label_visibility">Visibility</string>
+    <string name="label_feels_like">Feels Like</string>
+    <string name="label_clouds">Clouds</string>
+    <string name="label_sunrise">Sunrise</string>
+    <string name="label_sunset">Sunset</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_location">Location</string>
+    <string name="settings_gps">GPS</string>
+    <string name="settings_map">Map</string>
+    <string name="settings_temperature">Temperature</string>
+    <string name="settings_wind">Wind Speed</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_dark">Dark</string>
+    <string name="settings_light">Light</string>
+
+    <!-- Favorites Screen -->
+    <string name="favorites_empty">No favorites yet.\nTap + to add a location.</string>
+    <string name="favorites_add">Add Location</string>
+    <string name="favorites_search_hint">Search for a city…</string>
+    <string name="favorites_delete">Remove</string>
+
+    <!-- Alerts Screen -->
+    <string name="alerts_create">Create Alert</string>
+    <string name="alerts_active">Active Alerts</string>
+    <string name="alerts_empty">No alerts configured.</string>
+    <string name="alerts_notification">Notification</string>
+    <string name="alerts_sound">Alarm Sound</string>
+    <string name="alerts_start">Start Time</string>
+    <string name="alerts_end">End Time</string>
+    <string name="alerts_stop_all">Stop All Notifications</string>
+
+    <!-- Generic -->
+    <string name="error_generic">Something went wrong. Please try again.</string>
+    <string name="retry">Retry</string>
 </resources>

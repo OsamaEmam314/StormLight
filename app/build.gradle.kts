@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.work.runtime.ktx)
@@ -99,4 +100,6 @@ dependencies {
     androidTestImplementation(libs.androidx.work.testing)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation(libs.kotlinx.serialization.json)
+
 }

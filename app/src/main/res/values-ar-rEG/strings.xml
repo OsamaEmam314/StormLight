@@ -1,2 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">ستورم لايت</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_favorites">المفضلة</string>
+    <string name="nav_alerts">التنبيهات</string>
+    <string name="nav_settings">الإعدادات</string>
+
+    <!-- Home Screen -->
+    <string name="label_hourly">بالساعة</string>
+    <string name="label_5day">توقعات 5 أيام</string>
+    <string name="label_humidity">الرطوبة</string>
+    <string name="label_wind">الرياح</string>
+    <string name="label_pressure">الضغط</string>
+    <string name="label_visibility">الرؤية</string>
+    <string name="label_feels_like">يشعر كأنه</string>
+    <string name="label_clouds">الغيوم</string>
+    <string name="label_sunrise">شروق الشمس</string>
+    <string name="label_sunset">غروب الشمس</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_location">الموقع</string>
+    <string name="settings_gps">GPS</string>
+    <string name="settings_map">الخريطة</string>
+    <string name="settings_temperature">درجة الحرارة</string>
+    <string name="settings_wind">سرعة الرياح</string>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_theme">المظهر</string>
+    <string name="settings_dark">داكن</string>
+    <string name="settings_light">فاتح</string>
+
+    <!-- Favorites Screen -->
+    <string name="favorites_empty">لا توجد مفضلة بعد.\nاضغط + لإضافة موقع.</string>
+    <string name="favorites_add">إضافة موقع</string>
+    <string name="favorites_search_hint">ابحث عن مدينة…</string>
+    <string name="favorites_delete">حذف</string>
+
+    <!-- Alerts Screen -->
+    <string name="alerts_create">إنشاء تنبيه</string>
+    <string name="alerts_active">التنبيهات النشطة</string>
+    <string name="alerts_empty">لا توجد تنبيهات مُعدَّة.</string>
+    <string name="alerts_notification">إشعار</string>
+    <string name="alerts_sound">صوت منبه</string>
+    <string name="alerts_start">وقت البدء</string>
+    <string name="alerts_end">وقت الانتهاء</string>
+    <string name="alerts_stop_all">إيقاف جميع الإشعارات</string>
+
+    <!-- Generic -->
+    <string name="error_generic">حدث خطأ ما. يرجى المحاولة مجددًا.</string>
+    <string name="retry">إعادة المحاولة</string>
+</resources>

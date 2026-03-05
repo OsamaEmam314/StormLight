@@ -1,6 +1,7 @@
 [versions]
 agp = "8.13.2"
 kotlin = "2.0.21"
+kotlinxSerializationJson = "1.8.0"
 ksp = "2.0.21-1.0.27"
 
 # AndroidX Core
@@ -84,6 +85,7 @@ androidx-lifecycle-viewmodel-compose-android = { module = "androidx.lifecycle:li
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 
 # Networking - Retrofit + OkHttp
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }
@@ -127,6 +129,7 @@ androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "workManager" }
+androidx-compose-material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
