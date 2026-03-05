@@ -1,4 +1,4 @@
-package com.example.stormlight
+package com.example.stormlight.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
