@@ -7,12 +7,14 @@ import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.EditNotifications
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.AddAlert
 import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.EditNotifications
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Radar
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,8 +41,8 @@ sealed class StormlightDestinations(
     data object Alerts : StormlightDestinations(
         route = "alerts",
         labelResId = com.example.stormlight.R.string.nav_alerts,
-        selectedIcon = Icons.Filled.EditNotifications,
-        unselectedIcon = Icons.Outlined.EditNotifications,
+        selectedIcon = Icons.Filled.Notifications,
+        unselectedIcon = Icons.Outlined.Notifications,
     )
 
     data object Settings : StormlightDestinations(
