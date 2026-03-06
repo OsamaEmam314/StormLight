@@ -7,7 +7,7 @@ import com.example.stormlight.utilities.enums.TemperatureUnit
 import com.example.stormlight.utilities.enums.WindSpeedUnit
 
 data class UserPrefrences(
-    val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val themeMode: ThemeMode = ThemeMode.DARK,
     val language: Language = Language.ENGLISH,
     val locationSource: LocationSource = LocationSource.GPS,
     val temperatureUnit: TemperatureUnit = TemperatureUnit.CELSIUS,

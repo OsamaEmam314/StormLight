@@ -30,7 +30,14 @@
     <string name="settings_theme">Theme</string>
     <string name="settings_dark">Dark</string>
     <string name="settings_light">Light</string>
-
+    <string name="settings_celsius">°C</string>
+    <string name="settings_fahrenheit">°F</string>
+    <string name="settings_kelvin">K</string>
+    <string name="settings_meter_sec">m/s</string>
+    <string name="settings_mph">mph</string>
+    <string name="settings_system">System</string>
+    <string name="settings_english">English</string>
+    <string name="settings_arabic">العربية</string>
     <!-- Favorites Screen -->
     <string name="favorites_empty">No favorites yet.\nTap + to add a location.</string>
     <string name="favorites_add">Add Location</string>

@@ -53,6 +53,6 @@ sealed class StormlightDestinations(
     )
 
     companion object {
-        val all: List<StormlightDestinations> = listOf(Home, Favorites, Alerts, Settings)
+        val all: List<StormlightDestinations> get() = listOf(Home, Favorites, Alerts, Settings)
     }
 }

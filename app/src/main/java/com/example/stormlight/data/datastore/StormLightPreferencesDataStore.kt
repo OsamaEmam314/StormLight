@@ -31,7 +31,7 @@ class StormLightPreferencesDataStore(private val context: Context) {
         UserPrefrences(
             language = Language.valueOf(it[KEY_LANGUAGE] ?: Language.ENGLISH.name),
             locationSource = LocationSource.valueOf(it[KEY_LOCATION_SOURCE] ?: LocationSource.GPS.name),
-            themeMode = ThemeMode.valueOf(it[KEY_THEME_MODE] ?: ThemeMode.SYSTEM.name),
+            themeMode = ThemeMode.valueOf(it[KEY_THEME_MODE] ?: ThemeMode.DARK.name),
             windSpeedUnit = WindSpeedUnit.valueOf(it[KEY_WIND_SPEED_UNIT] ?: WindSpeedUnit.METER_PER_SEC.name),
             temperatureUnit = TemperatureUnit.valueOf(it[KEY_TEMPERATURE_UNIT] ?: TemperatureUnit.CELSIUS.name)
         )

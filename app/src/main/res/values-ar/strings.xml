@@ -28,9 +28,17 @@
     <string name="settings_wind">سرعة الرياح</string>
     <string name="settings_language">اللغة</string>
     <string name="settings_theme">المظهر</string>
-    <string name="settings_dark">داكن</string>
-    <string name="settings_light">فاتح</string>
-
+    <string name="settings_dark">الليل</string>
+    <string name="settings_light">النهار</string>
+    <!-- Settings Screen - Units & Options -->
+    <string name="settings_celsius">°م</string>
+    <string name="settings_fahrenheit">°ف</string>
+    <string name="settings_kelvin">ك</string>
+    <string name="settings_meter_sec">م/ث</string>
+    <string name="settings_mph">ميل/س</string>
+    <string name="settings_system">تلقائي</string>
+    <string name="settings_english">English</string>
+    <string name="settings_arabic">العربية</string>
     <!-- Favorites Screen -->
     <string name="favorites_empty">لا توجد مفضلة بعد.\nاضغط + لإضافة موقع.</string>
     <string name="favorites_add">إضافة موقع</string>

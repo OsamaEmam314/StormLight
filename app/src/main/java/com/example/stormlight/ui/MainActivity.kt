@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,9 +24,12 @@ import com.example.stormlight.ui.theme.StormLightTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.example.stormlight.R
 import com.example.stormlight.ui.navigation.StormlightDestinations
 
 class MainActivity : ComponentActivity() {
@@ -46,12 +51,26 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StormLightApp(){
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     Scaffold(
+        topBar = {
+            val  destTitle = currentDestination?.route ?: StormlightDestinations.Home.route
+            if (destTitle == StormlightDestinations.Settings.route) {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(R.string.nav_settings),
+                        )
+                    },
+
+                )
+            }
+        },
         bottomBar = {
             NavigationBar(
                 containerColor = MaterialTheme.colorScheme.surface,
@@ -91,7 +110,8 @@ fun StormLightApp(){
                     )
                 }
             }
-        }
+        },
+
     ) {
         innerPadding ->
         AppNavGraph(
