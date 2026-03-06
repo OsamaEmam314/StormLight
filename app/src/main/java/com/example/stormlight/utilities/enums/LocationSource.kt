@@ -1,6 +1,6 @@
 package com.example.stormlight.utilities.enums
 
-enum class Location {
+enum class LocationSource {
     GPS,
     Map,
 }
