@@ -1,6 +1,8 @@
 package com.example.stormlight.utilities.enums
 
 enum class ThemeMode {
-    Light,
-    Dark
+    LIGHT,
+    DARK,
+    SYSTEM
 }
+
