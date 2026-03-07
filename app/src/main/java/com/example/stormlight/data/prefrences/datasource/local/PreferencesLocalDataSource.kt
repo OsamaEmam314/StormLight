@@ -14,10 +14,11 @@ import com.example.stormlight.utilities.enums.LocationSource
 class PreferencesLocalDataSource(private val context: Context) {
     private val dataStore: StormLightPreferencesDataStore = StormLightPreferencesDataStore(context)
     val userPreferences: Flow<UserPrefrences> = dataStore.userPrefrencesFlow
-    suspend fun setLanguage(language: Language)             = dataStore.setLanguage(language)
-    suspend fun setThemeMode(themeMode: ThemeMode)          = dataStore.setThemeMode(themeMode)
-    suspend fun setTemperatureUnit(unit: TemperatureUnit)   = dataStore.setTemperatureUnit(unit)
-    suspend fun setWindSpeedUnit(unit: WindSpeedUnit)       = dataStore.setWindSpeedUnit(unit)
-    suspend fun setLocationSource(source: LocationSource)   = dataStore.setLocationSource(source)
-
+    suspend fun setLanguage(language: Language) = dataStore.setLanguage(language)
+    suspend fun setThemeMode(themeMode: ThemeMode) = dataStore.setThemeMode(themeMode)
+    suspend fun setTemperatureUnit(unit: TemperatureUnit) = dataStore.setTemperatureUnit(unit)
+    suspend fun setWindSpeedUnit(unit: WindSpeedUnit) = dataStore.setWindSpeedUnit(unit)
+    suspend fun setLocationSource(source: LocationSource) = dataStore.setLocationSource(source)
+    suspend fun setLatitude(lat: String) = dataStore.setLatitude(lat)
+    suspend fun setLongitude(lon: String) = dataStore.setLongitude(lon)
 }

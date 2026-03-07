@@ -1,10 +1,12 @@
 package com.example.stormlight.ui.main.view
 
+import android.Manifest
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,7 +41,14 @@ import com.example.stormlight.ui.main.viewmodel.MainViewModel
 import com.example.stormlight.ui.main.viewmodel.MainViewModelFactory
 import com.example.stormlight.ui.navigation.StormlightDestinations
 import com.example.stormlight.utilities.LocaleUtils
+import com.example.stormlight.utilities.LocationHelper
+import com.example.stormlight.utilities.PermissionUtils
+import com.example.stormlight.utilities.enums.LocationSource
 import com.example.stormlight.utilities.enums.ThemeMode
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val repository by lazy {
@@ -50,12 +59,55 @@ class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModelFactory(repository)
     }
+    private val locationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+        if (granted) fetchAndSaveGpsLocation()
+        else Log.w("MainActivity", "Location permission denied")
+    }
+    private fun requestLocationIfNeeded() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val prefs = repository.userPreferences.first()
+            if (prefs.locationSource == LocationSource.GPS) {
+                if (PermissionUtils.hasLocationPermission(applicationContext)) {
+                    fetchAndSaveGpsLocation()
+                } else {
+                    locationPermissionLauncher.launch(
+                        arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        )
+                    )
+                }
+            }
+        }
+    }
+    fun fetchAndSaveGpsLocation() {
+        if (!LocationHelper.isLocationEnabled(this)) {
+            Log.w("MainActivity", "Location services disabled on device")
+            return
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            LocationHelper.getCurrentLocation(applicationContext).collect { latLon->
+                if (latLon != null) {
+                    mainViewModel.setLatitude(latLon.lat.toString())
+                    mainViewModel.setLongitude(latLon.lon.toString())
+                }
+
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
+        requestLocationIfNeeded()
+
         setContent {
             val prefs by mainViewModel.userPrefs.collectAsStateWithLifecycle()
             LaunchedEffect(prefs.language) {

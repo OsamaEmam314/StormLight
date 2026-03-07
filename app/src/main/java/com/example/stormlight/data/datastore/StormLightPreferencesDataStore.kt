@@ -26,6 +26,8 @@ class StormLightPreferencesDataStore(private val context: Context) {
         val KEY_LANGUAGE = stringPreferencesKey("language")
         val KEY_THEME_MODE = stringPreferencesKey("theme_mode")
         val KEY_LOCATION_SOURCE = stringPreferencesKey("location")
+        val KEY_LAT = stringPreferencesKey("lat")
+        val KEY_LON = stringPreferencesKey("lon")
     }
     val userPrefrencesFlow = context.dataStore.data.map {
         UserPrefrences(
@@ -33,8 +35,16 @@ class StormLightPreferencesDataStore(private val context: Context) {
             locationSource = LocationSource.valueOf(it[KEY_LOCATION_SOURCE] ?: LocationSource.GPS.name),
             themeMode = ThemeMode.valueOf(it[KEY_THEME_MODE] ?: ThemeMode.DARK.name),
             windSpeedUnit = WindSpeedUnit.valueOf(it[KEY_WIND_SPEED_UNIT] ?: WindSpeedUnit.METER_PER_SEC.name),
-            temperatureUnit = TemperatureUnit.valueOf(it[KEY_TEMPERATURE_UNIT] ?: TemperatureUnit.CELSIUS.name)
+            temperatureUnit = TemperatureUnit.valueOf(it[KEY_TEMPERATURE_UNIT] ?: TemperatureUnit.CELSIUS.name),
+            lat = it[KEY_LAT] ?: "0.0",
+            lon = it[KEY_LON] ?: "0.0"
         )
+    }
+    suspend fun setLatitude(lat: String) {
+        context.dataStore.edit { it[KEY_LAT] = lat }
+    }
+    suspend fun setLongitude(lon: String) {
+        context.dataStore.edit { it[KEY_LON] = lon }
     }
     suspend fun setLanguage(language: Language) {
         context.dataStore.edit { it[KEY_LANGUAGE] = language.name }

@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stormlight.data.model.UserPrefrences
 import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.utilities.enums.Language
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class MainViewModel(
-    repository: PrefrencesRepository
+   private val repository: PrefrencesRepository
 ) : ViewModel() {
     val userPrefs: StateFlow<UserPrefrences> = repository.userPreferences
         .stateIn(
@@ -17,4 +19,14 @@ class MainViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = UserPrefrences()
         )
+    fun setLatitude(lat: String) {
+        viewModelScope.launch {
+            repository.setLatitude(lat)
+        }
+    }
+    fun setLongitude(lon: String) {
+        viewModelScope.launch {
+            repository.setLongitude(lon)
+        }
+    }
 }

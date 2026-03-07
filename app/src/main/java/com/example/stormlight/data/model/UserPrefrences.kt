@@ -11,5 +11,7 @@ data class UserPrefrences(
     val language: Language = Language.ENGLISH,
     val locationSource: LocationSource = LocationSource.GPS,
     val temperatureUnit: TemperatureUnit = TemperatureUnit.CELSIUS,
-    val windSpeedUnit: WindSpeedUnit = WindSpeedUnit.METER_PER_SEC
+    val windSpeedUnit: WindSpeedUnit = WindSpeedUnit.METER_PER_SEC,
+    val lat: String = "0.0",
+    val lon: String = "0.0"
 )

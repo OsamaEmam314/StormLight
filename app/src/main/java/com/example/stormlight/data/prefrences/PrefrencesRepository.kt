@@ -14,10 +14,11 @@ class PrefrencesRepository(private val context: Context) {
     private val localDataSource = StormLightPreferencesDataStore(context)
     val userPreferences: Flow<UserPrefrences> = localDataSource.userPrefrencesFlow
 
-    suspend fun setLanguage(language: Language)             = localDataSource.setLanguage(language)
-    suspend fun setThemeMode(themeMode: ThemeMode)          = localDataSource.setThemeMode(themeMode)
-    suspend fun setTemperatureUnit(unit: TemperatureUnit)   = localDataSource.setTemperatureUnit(unit)
-    suspend fun setWindSpeedUnit(unit: WindSpeedUnit)       = localDataSource.setWindSpeedUnit(unit)
-    suspend fun setLocationSource(source: LocationSource)   = localDataSource.setLocationSource(source)
-
+    suspend fun setLanguage(language: Language) = localDataSource.setLanguage(language)
+    suspend fun setThemeMode(themeMode: ThemeMode) = localDataSource.setThemeMode(themeMode)
+    suspend fun setTemperatureUnit(unit: TemperatureUnit) = localDataSource.setTemperatureUnit(unit)
+    suspend fun setWindSpeedUnit(unit: WindSpeedUnit) = localDataSource.setWindSpeedUnit(unit)
+    suspend fun setLocationSource(source: LocationSource) = localDataSource.setLocationSource(source)
+    suspend fun setLatitude(lat: String) = localDataSource.setLatitude(lat)
+    suspend fun setLongitude(lon: String) = localDataSource.setLongitude(lon)
 }
