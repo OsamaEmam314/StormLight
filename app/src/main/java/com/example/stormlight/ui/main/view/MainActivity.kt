@@ -1,9 +1,12 @@
-package com.example.stormlight.ui
+package com.example.stormlight.ui.main.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -16,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -24,15 +26,30 @@ import com.example.stormlight.ui.theme.StormLightTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.stormlight.R
+import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.ui.AppNavGraph
+import com.example.stormlight.ui.main.viewmodel.MainViewModel
+import com.example.stormlight.ui.main.viewmodel.MainViewModelFactory
 import com.example.stormlight.ui.navigation.StormlightDestinations
+import com.example.stormlight.utilities.LocaleUtils
+import com.example.stormlight.utilities.enums.ThemeMode
 
 class MainActivity : ComponentActivity() {
+    private val repository by lazy {
+        PrefrencesRepository(
+            applicationContext
+        )
+    }
+    private val mainViewModel: MainViewModel by viewModels {
+        MainViewModelFactory(repository)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
@@ -40,7 +57,20 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            StormLightTheme {
+            val prefs by mainViewModel.userPrefs.collectAsStateWithLifecycle()
+            LaunchedEffect(prefs.language) {
+                val currentLocale = AppCompatDelegate.getApplicationLocales().toLanguageTags()
+                if (currentLocale != prefs.language.language) {
+                    Log.d("pref from main", "Applying language: ${prefs.language.language}")
+                    LocaleUtils.applyLocale(prefs.language, applicationContext)
+                }
+            }
+            val darkMode = when(prefs.themeMode) {
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+            }
+
+            StormLightTheme(darkTheme = darkMode) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
@@ -74,7 +104,7 @@ fun StormLightApp(){
         bottomBar = {
             NavigationBar(
                 containerColor = MaterialTheme.colorScheme.surface,
-                tonalElevation = androidx.compose.ui.unit.Dp(0f),
+                tonalElevation = Dp(0f),
             ){
                 StormlightDestinations.all.forEach { destination ->
                     var selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true

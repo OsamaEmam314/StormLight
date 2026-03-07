@@ -57,4 +57,5 @@
     <!-- Generic -->
     <string name="error_generic">Something went wrong. Please try again.</string>
     <string name="retry">Retry</string>
+    <string name="title_activity_main2">MainActivity2</string>
 </resources>
