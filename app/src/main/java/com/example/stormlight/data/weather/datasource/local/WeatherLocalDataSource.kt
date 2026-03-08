@@ -18,7 +18,7 @@ class WeatherLocalDataSource(
     override suspend fun saveForecast(dto: ForecastDto) {
         weatherDataStore.saveForecast(gson.toJson(dto))
     }
-    val currentWeatherFlow: Flow<CurrentWeatherDto?> = weatherDataStore.currentWeatherFlow.map {
+    override val currentWeatherFlow: Flow<CurrentWeatherDto?> = weatherDataStore.currentWeatherFlow.map {
         json ->
         if (json == null) return@map null
         try {
@@ -27,7 +27,7 @@ class WeatherLocalDataSource(
             null
         }
     }
-    val forecastFlow: Flow<ForecastDto?> = weatherDataStore.forecastFlow.map {
+    override val forecastFlow: Flow<ForecastDto?> = weatherDataStore.forecastFlow.map {
         json ->
         if (json == null) return@map null
         try {
