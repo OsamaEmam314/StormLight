@@ -47,7 +47,7 @@ import com.example.stormlight.data.weather.datasource.remote.WeatherRemoteDataSo
 import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
 import com.example.stormlight.ui.components.CurrentWeatherHeader
 import com.example.stormlight.ui.components.CurrentWeatherHero
-import com.example.stormlight.ui.screens.home.components.current.MetricsGrid
+import com.example.stormlight.ui.components.MetricsGrid
 import com.example.stormlight.ui.screens.home.components.forecast.DailyForecast
 import com.example.stormlight.ui.screens.home.components.forecast.HourlyForecast
 import com.example.stormlight.ui.screens.home.viewmodel.HomeViewModel
@@ -87,10 +87,10 @@ fun HomeScreen(
         }
     }
     PullToRefreshBox(
-        state       = pullRefreshState,
+        state = pullRefreshState,
         isRefreshing = isRefreshing,
-        onRefresh   = {
-           scope.launch {
+        onRefresh = {
+            scope.launch {
                 isRefreshing = true
                 viewModel.retry()
             }
@@ -98,20 +98,21 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize(),
         indicator = {
             Indicator(
-                modifier       = Modifier.align(Alignment.TopCenter),
-                isRefreshing   = isRefreshing,
-                state          = pullRefreshState,
-                color          = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.align(Alignment.TopCenter),
+                isRefreshing = isRefreshing,
+                state = pullRefreshState,
+                color = MaterialTheme.colorScheme.primary,
                 containerColor = MaterialTheme.colorScheme.surface
             )
         }
     ) {
         when (val state = uiState) {
             is HomeUiState.Loading -> HomeLoadingState()
-            is HomeUiState.Error   -> HomeErrorState(
+            is HomeUiState.Error -> HomeErrorState(
                 message = state.message,
                 onRetry = { viewModel.retry() }
             )
+
             is HomeUiState.Success -> HomeSuccessState(state = state)
         }
     }
@@ -119,66 +120,61 @@ fun HomeScreen(
 
 @Composable
 fun HomeSuccessState(state: HomeUiState.Success) {
-    val current  = state.currentWeather
+    val current = state.currentWeather
     val forecast = state.forecast
-    val prefs    = state.userPrefrences
+    val prefs = state.userPrefrences
     val timezoneOffset = current.timezone
-    val todayLabel = utcDateLabel(
-        epochSeconds          = System.currentTimeMillis() / 1000L,
-        timezoneOffsetSeconds = timezoneOffset
-    )
-    val hourlyToday = forecast.list.filter { item ->
-        utcDateLabel(
-            item.dt, timezoneOffset
-        ) == todayLabel
-    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(bottom = 100.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
-    ){
-        current.localNames?.get(prefs.language.language)
-
+    ) {
         CurrentWeatherHeader(
-            cityName       = current.localNames?.get(prefs.language.language) ?: current.name,
-            country        = current.sys.country,
-            dt             = current.dt,
-            timezoneOffset = timezoneOffset
+            cityName = current.localNames?.get(prefs.language.language) ?: current.name,
+            country = current.sys.country,
+            dt = current.dt,
+            timezoneOffset = timezoneOffset,
+            language = prefs.language
         )
-        Log.d("HomeScreen", "HomeSuccessState: ${prefs.temperatureUnit.symbol}")
-     CurrentWeatherHero(
-            temperature     = current.main.temp,
-            tempMin         = current.main.tempMin,
-            tempMax         = current.main.tempMax,
-            description     = current.weather.firstOrNull()?.description.orEmpty(),
-            iconCode        = current.weather.firstOrNull()?.icon.orEmpty(),
+
+        CurrentWeatherHero(
+            temperature = current.main.temp,
+            tempMin = current.main.tempMin,
+            tempMax = current.main.tempMax,
+            description = current.weather.firstOrNull()?.description.orEmpty(),
+            iconCode = current.weather.firstOrNull()?.icon.orEmpty(),
             temperatureUnit = prefs.temperatureUnit,
-            modifier        = Modifier.padding(horizontal = 24.dp),
+            modifier = Modifier.padding(horizontal = 24.dp)
         )
-       MetricsGrid(
-            current         = current,
+
+        MetricsGrid(
+            current = current,
             temperatureUnit = prefs.temperatureUnit,
-            windSpeedUnit   = prefs.windSpeedUnit,
-            modifier        = Modifier.padding(horizontal = 24.dp)
+            windSpeedUnit = prefs.windSpeedUnit,
+            modifier = Modifier.padding(horizontal = 24.dp)
         )
+
         HourlyForecast(
-            forecastItems   = forecast.list,
-            timezoneOffset  = timezoneOffset,
+            forecastItems = forecast.list,
+            timezoneOffset = timezoneOffset,
             temperatureUnit = prefs.temperatureUnit,
-            modifier        = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier.padding(horizontal = 24.dp),
+            language = prefs.language
         )
-      DailyForecast(
-            forecastItems   = forecast.list,
-            timezoneOffset  = timezoneOffset,
+
+        DailyForecast(
+            forecastItems = forecast.list,
+            timezoneOffset = timezoneOffset,
             temperatureUnit = prefs.temperatureUnit,
-            modifier        = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier.padding(horizontal = 24.dp),
+            language = prefs.language
         )
+
         Spacer(modifier = Modifier.height(8.dp))
-
     }
-
 }
 
 @Composable
@@ -205,7 +201,7 @@ private fun HomeErrorState(
             )
             Log.d("HomeScreen", "HomeErrorState: $message")
             Text(
-               // text = message,
+                // text = message,
                 text = stringResource(R.string.error_generic),
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,

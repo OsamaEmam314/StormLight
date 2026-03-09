@@ -1,4 +1,4 @@
-package com.example.stormlight.ui.screens.home.components.current
+package com.example.stormlight.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,17 +32,18 @@ import com.example.stormlight.utilities.enums.TemperatureUnit
 import com.example.stormlight.utilities.enums.WindSpeedUnit
 
 @Composable
-fun MetricCard(
+private fun MetricCard(
     iconRes: Int,
     label: String,
     value: String,
+    unit: String = "",
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
             .background(Color.White.copy(alpha = 0.05f))
-            .border(1.dp, Color.White.copy(alpha = 0.1f), RoundedCornerShape(24.dp))
+            .border(1.dp, Color.White.copy(alpha = 0.10f), RoundedCornerShape(24.dp))
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -57,28 +58,43 @@ fun MetricCard(
                 modifier = Modifier
                     .size(32.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.10f))
                     .padding(6.dp)
             )
             Text(
                 text = label.uppercase(),
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = 1.sp
             )
         }
-        androidx.compose.runtime.CompositionLocalProvider(
-            LocalLayoutDirection provides LayoutDirection.Ltr
-        ) {
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
+
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = value,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                if (unit.isNotEmpty()) {
+                    Text(
+                        text = unit,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f),
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                }
+            }
         }
     }
 }
+
 @Composable
 fun MetricsGrid(
     current: CurrentWeatherDto,
@@ -86,28 +102,55 @@ fun MetricsGrid(
     windSpeedUnit: WindSpeedUnit,
     modifier: Modifier = Modifier
 ) {
+    val windFormatted = UnitUtils.formatWind(current.wind.speed, windSpeedUnit.symbol)
+    val visFormatted = UnitUtils.formatVisibility(current.visibility)
 
-    val items = listOf(
-        Triple(R.drawable.ic_humidity,   stringResource(R.string.label_humidity),   "${current.main.humidity}%"),
-        Triple(R.drawable.ic_wind,       stringResource(R.string.label_wind),       UnitUtils.formatWind(current.wind.speed, windSpeedUnit.symbol)),
-        Triple(R.drawable.ic_pressure,   stringResource(R.string.label_pressure),   "${current.main.pressure} hPa"),
-        Triple(R.drawable.ic_visibility, stringResource(R.string.label_visibility), UnitUtils.formatVisibility(current.visibility))
+    val windParts = windFormatted.split(" ")
+    val windValue = windParts.getOrElse(0) { windFormatted }
+    val windUnit = windParts.getOrElse(1) { "" }
+
+    val visParts = visFormatted.split(" ")
+    val visValue = visParts.getOrElse(0) { visFormatted }
+    val visUnit = visParts.getOrElse(1) { "" }
+
+    val cards = listOf(
+        arrayOf(
+            R.drawable.ic_humidity,
+            stringResource(R.string.label_humidity),
+            "${current.main.humidity}",
+            "%"
+        ),
+        arrayOf(R.drawable.ic_wind, stringResource(R.string.label_wind), windValue, windUnit),
+        arrayOf(
+            R.drawable.ic_pressure,
+            stringResource(R.string.label_pressure),
+            "${current.main.pressure}",
+            "hPa"
+        ),
+        arrayOf(
+            R.drawable.ic_visibility,
+            stringResource(R.string.label_visibility),
+            visValue,
+            visUnit
+        )
     )
 
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items.chunked(2).forEach { row ->
+        cards.chunked(2).forEach { row ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                row.forEach { (icon, label, value) ->
+                @Suppress("UNCHECKED_CAST")
+                (row as List<Array<Any>>).forEach { (icon, label, value, unit) ->
                     MetricCard(
-                        iconRes  = icon,
-                        label    = label,
-                        value    = value,
+                        iconRes = icon as Int,
+                        label = label as String,
+                        value = value as String,
+                        unit = unit as String,
                         modifier = Modifier.weight(1f)
                     )
                 }

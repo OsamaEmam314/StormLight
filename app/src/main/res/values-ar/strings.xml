@@ -58,4 +58,6 @@
     <!-- Generic -->
     <string name="error_generic">حدث خطأ ما. يرجى المحاولة مجددًا.</string>
     <string name="retry">إعادة المحاولة</string>
+    <string name="label_now">الآن</string>
+    <string name="label_today">اليوم</string>
 </resources>
