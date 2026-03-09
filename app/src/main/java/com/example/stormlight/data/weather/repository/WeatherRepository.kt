@@ -3,6 +3,7 @@ package com.example.stormlight.data.weather.repository
 
 import com.example.stormlight.data.model.CurrentWeatherDto
 import com.example.stormlight.data.model.ForecastDto
+import com.example.stormlight.data.model.GeoLocationDto
 import com.example.stormlight.utilities.Resource
 import kotlinx.coroutines.flow.Flow
 
@@ -18,4 +19,6 @@ interface WeatherRepository {
         lon: Double,
         lang: String
     ): Flow<Resource<ForecastDto>>
+    suspend fun searchCity(query: String): Resource<List<GeoLocationDto>>
+    suspend fun reverseGeocode(lat: Double, lon: Double): Resource<GeoLocationDto>
 }

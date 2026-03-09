@@ -94,6 +94,7 @@ class MainActivity : ComponentActivity() {
                 if (latLon != null) {
                     mainViewModel.setLatitude(latLon.lat.toString())
                     mainViewModel.setLongitude(latLon.lon.toString())
+                    Log.d("MainActivity", "Location fetched: ${latLon.lat}, ${latLon.lon}")
                 }
 
             }

@@ -19,7 +19,8 @@ data class CurrentWeatherDto(
     @SerializedName("sys") val sys: SysDto,
     @SerializedName("timezone") val timezone: Int,
     @SerializedName("name") val name: String,
-   // @SerializedName("cod") val cod: Int
+    var localNames: Map<String, String>? = null,
+    // @SerializedName("cod") val cod: Int
 )
 
 

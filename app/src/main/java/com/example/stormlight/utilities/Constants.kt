@@ -15,8 +15,11 @@ object Constants {
     const val API_UNITS = "metric"
 
     const val UNIT_CELSIUS = "celsius"
+    const val UNIT_CELSIUS_SYMBOL = "°C"
     const val UNIT_FAHRENHEIT = "fahrenheit"
+    const val UNIT_FAHRENHEIT_SYMBOL = "°F"
     const val UNIT_KELVIN = "kelvin"
+    const val UNIT_KELVIN_SYMBOL = "K"
 
     const val UNIT_MS = "ms"
     const val UNIT_MPH = "mph"

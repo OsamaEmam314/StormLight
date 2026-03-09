@@ -1,17 +1,27 @@
 package com.example.stormlight.utilities
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.example.stormlight.R
+import com.example.stormlight.utilities.enums.TemperatureUnit
 import kotlin.math.roundToInt
 
 object UnitUtils {
 
     fun convertTemp(celsius: Double, unit: String): Double = when (unit) {
-        Constants.UNIT_FAHRENHEIT -> celsius * 9.0 / 5.0 + 32.0
-        Constants.UNIT_KELVIN -> celsius + 273.15
+        Constants.UNIT_FAHRENHEIT_SYMBOL -> celsius * 9.0 / 5.0 + 32.0
+        Constants.UNIT_KELVIN_SYMBOL -> celsius + 273.15
         else -> celsius
     }
+     fun tempSymbol(unit: TemperatureUnit): String = when (unit) {
+        TemperatureUnit.FAHRENHEIT -> "°F"
+        TemperatureUnit.KELVIN     -> "K"
+        else                       -> "°C"
+    }
+
     fun tempLabel(unit: String): String = when (unit) {
-        Constants.UNIT_FAHRENHEIT -> "°F"
-        Constants.UNIT_KELVIN -> "K"
+        Constants.UNIT_FAHRENHEIT_SYMBOL -> "°F"
+        Constants.UNIT_KELVIN_SYMBOL -> "K"
         else -> "°C"
     }
     fun formatTemp(celsius: Double, unit: String): String =
