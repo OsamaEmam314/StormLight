@@ -47,10 +47,19 @@ fun HourlyForecast(
     forecastItems: List<ForecastItemDto>,
     timezoneOffset: Int,
     temperatureUnit: TemperatureUnit,
-    language: Language,                  // ← new param
+    language: Language,
     modifier: Modifier = Modifier
 ) {
     val locale = if (language == Language.ARABIC) Locale("ar") else Locale.ENGLISH
+
+    val nowEpoch = System.currentTimeMillis() / 1000L
+
+    val upcomingItems = remember(forecastItems, nowEpoch / 3600) {
+        val cutoff = nowEpoch - (90 * 60)
+        forecastItems.filter { it.dt >= cutoff }.take(8)
+    }
+
+    val nowSlotDt = upcomingItems.firstOrNull()?.dt
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -60,32 +69,33 @@ fun HourlyForecast(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 4.dp),
-            verticalAlignment     = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Icon(
-                imageVector        = Icons.Default.Schedule,
+                imageVector = Icons.Default.Schedule,
                 contentDescription = null,
-                tint               = MaterialTheme.colorScheme.primary,
-                modifier           = Modifier.size(20.dp)
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp)
             )
             Text(
-                text       = stringResource(R.string.label_hourly),
-                style      = MaterialTheme.typography.titleMedium,
+                text = stringResource(R.string.label_hourly),
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
         }
 
         LazyRow(
-            contentPadding        = PaddingValues(horizontal = 4.dp),
+            contentPadding = PaddingValues(horizontal = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(forecastItems) { item ->
+            items(upcomingItems, key = { it.dt }) { item ->
                 HourlyItem(
-                    item            = item,
-                    timezoneOffset  = timezoneOffset,
+                    item = item,
+                    timezoneOffset = timezoneOffset,
                     temperatureUnit = temperatureUnit,
-                    locale          = locale
+                    locale = locale,
+                    isNow = item.dt == nowSlotDt
                 )
             }
         }
@@ -97,13 +107,9 @@ private fun HourlyItem(
     item: ForecastItemDto,
     timezoneOffset: Int,
     temperatureUnit: TemperatureUnit,
-    locale: Locale
+    locale: Locale,
+    isNow: Boolean
 ) {
-    val nowHour  = System.currentTimeMillis() / 1000L / 3600
-    val itemHour = item.dt / 3600
-    val isNow    = remember(item.dt) { nowHour == itemHour }
-
-    // Locale-aware hour label — "03 م" in Arabic, "03 PM" in English
     val hourLabel = remember(item.dt, locale) {
         DateUtils.formatHourLabel(item.dt, timezoneOffset, locale)
     }
@@ -113,15 +119,16 @@ private fun HourlyItem(
     val cardModifier = if (isNow) {
         Modifier
             .shadow(
-                elevation    = 16.dp,
-                shape        = shape,
+                elevation = 16.dp,
+                shape = shape,
                 ambientColor = Color(0xFF0DA6F2).copy(alpha = 0.5f),
-                spotColor    = Color(0xFF0DA6F2).copy(alpha = 0.5f)
+                spotColor = Color(0xFF0DA6F2).copy(alpha = 0.5f)
             )
             .background(MaterialTheme.colorScheme.primary, shape)
     } else {
         Modifier
-            .background(Color.White.copy(alpha = 0.05f), shape)
+            .clip(shape)
+            .background(Color.White.copy(alpha = 0.05f))
             .border(1.dp, Color.White.copy(alpha = 0.10f), shape)
     }
 
@@ -135,27 +142,26 @@ private fun HourlyItem(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text       = if (isNow) stringResource(R.string.label_now) else hourLabel,
-            style      = MaterialTheme.typography.labelSmall,
+            text = if (isNow) stringResource(R.string.label_now) else hourLabel,
+            style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
-            color      = if (isNow) Color.White
+            color = if (isNow) Color.White
             else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
         )
 
         AsyncImage(
-            model              = Constants.weatherIconUrl(item.weather.firstOrNull()?.icon.orEmpty()),
+            model = Constants.weatherIconUrl(item.weather.firstOrNull()?.icon.orEmpty()),
             contentDescription = item.weather.firstOrNull()?.description,
-            modifier           = Modifier.size(28.dp),
-            contentScale       = ContentScale.Fit
+            modifier = Modifier.size(28.dp),
+            contentScale = ContentScale.Fit
         )
 
-        // Temperature — always LTR regardless of locale
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Text(
-                text       = UnitUtils.formatTemp(item.main.temp, temperatureUnit.symbol),
-                style      = MaterialTheme.typography.bodyMedium,
+                text = UnitUtils.formatTemp(item.main.temp, temperatureUnit.symbol),
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
-                color      = if (isNow) Color.White else MaterialTheme.colorScheme.onSurface
+                color = if (isNow) Color.White else MaterialTheme.colorScheme.onSurface
             )
         }
     }

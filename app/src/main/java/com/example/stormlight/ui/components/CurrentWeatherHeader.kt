@@ -38,13 +38,7 @@ fun CurrentWeatherHeader(
     modifier: Modifier = Modifier
 ) {
     val locale = if (language == Language.ARABIC) Locale("ar") else Locale.ENGLISH
-    val dateTime = "${DateUtils.formatFullDate(dt, timezoneOffset, locale)} • ${
-        DateUtils.formatTime(
-            dt,
-            timezoneOffset,
-            locale
-        )
-    }"
+    val dateTime = DateUtils.formatFullDate(dt, timezoneOffset, locale)
 
     Row(
         modifier = modifier
@@ -83,7 +77,6 @@ fun CurrentWeatherHeader(
                     text = dateTime,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    //  modifier = Modifier.padding(start = 26.dp)
                 )
             }
 

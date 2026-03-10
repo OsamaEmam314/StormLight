@@ -13,10 +13,11 @@ object UnitUtils {
         Constants.UNIT_KELVIN_SYMBOL -> celsius + 273.15
         else -> celsius
     }
-     fun tempSymbol(unit: TemperatureUnit): String = when (unit) {
+
+    fun tempSymbol(unit: TemperatureUnit): String = when (unit) {
         TemperatureUnit.FAHRENHEIT -> "°F"
-        TemperatureUnit.KELVIN     -> "K"
-        else                       -> "°C"
+        TemperatureUnit.KELVIN -> "K"
+        else -> "°C"
     }
 
     fun tempLabel(unit: String): String = when (unit) {
@@ -24,6 +25,7 @@ object UnitUtils {
         Constants.UNIT_KELVIN_SYMBOL -> "K"
         else -> "°C"
     }
+
     fun formatTemp(celsius: Double, unit: String): String =
         "${convertTemp(celsius, unit).roundToInt()}${tempLabel(unit)}"
 

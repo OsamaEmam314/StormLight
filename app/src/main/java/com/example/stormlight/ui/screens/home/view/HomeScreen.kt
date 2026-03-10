@@ -24,12 +24,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -52,9 +47,6 @@ import com.example.stormlight.ui.screens.home.components.forecast.DailyForecast
 import com.example.stormlight.ui.screens.home.components.forecast.HourlyForecast
 import com.example.stormlight.ui.screens.home.viewmodel.HomeViewModel
 import com.example.stormlight.ui.screens.home.viewmodel.HomeViewModelFactory
-import com.example.stormlight.utilities.DateUtils.utcDateLabel
-import kotlinx.coroutines.launch
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,25 +68,13 @@ fun HomeScreen(
         )
     )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val pullRefreshState = rememberPullToRefreshState()
-    val scope = rememberCoroutineScope()
-    var isRefreshing by remember { mutableStateOf(false) }
 
-    LaunchedEffect(uiState) {
-        if (uiState !is HomeUiState.Loading) {
-            isRefreshing = false
-        }
-    }
     PullToRefreshBox(
         state = pullRefreshState,
         isRefreshing = isRefreshing,
-        onRefresh = {
-            scope.launch {
-                isRefreshing = true
-                viewModel.retry()
-            }
-        },
+        onRefresh    = { viewModel.refresh() },
         modifier = modifier.fillMaxSize(),
         indicator = {
             Indicator(
@@ -124,6 +104,7 @@ fun HomeSuccessState(state: HomeUiState.Success) {
     val forecast = state.forecast
     val prefs = state.userPrefrences
     val timezoneOffset = current.timezone
+    val forecastHourlyList = forecast.list.take(8)
 
     Column(
         modifier = Modifier
@@ -158,7 +139,7 @@ fun HomeSuccessState(state: HomeUiState.Success) {
         )
 
         HourlyForecast(
-            forecastItems = forecast.list,
+            forecastItems = forecastHourlyList,
             timezoneOffset = timezoneOffset,
             temperatureUnit = prefs.temperatureUnit,
             modifier = Modifier.padding(horizontal = 24.dp),
@@ -201,7 +182,6 @@ private fun HomeErrorState(
             )
             Log.d("HomeScreen", "HomeErrorState: $message")
             Text(
-                // text = message,
                 text = stringResource(R.string.error_generic),
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,

@@ -37,15 +37,16 @@ import com.example.stormlight.utilities.UnitUtils
 import com.example.stormlight.utilities.enums.Language
 import com.example.stormlight.utilities.enums.TemperatureUnit
 import java.util.Locale
+import kotlin.math.abs
 
 private data class DailyRowData(
-    val dayLabel:    String,
-    val dateLabel:   String,
-    val iconCode:    String,
+    val dayLabel: String,
+    val dateLabel: String,
+    val iconCode: String,
     val description: String,
-    val tempMax:     Double,
-    val tempMin:     Double,
-    val isToday:     Boolean
+    val tempMax: Double,
+    val tempMin: Double,
+    val isToday: Boolean
 )
 
 @Composable
@@ -53,17 +54,16 @@ fun DailyForecast(
     forecastItems: List<ForecastItemDto>,
     timezoneOffset: Int,
     temperatureUnit: TemperatureUnit,
-    language: Language,                  // ← new param so remember reruns on change
+    language: Language,
     modifier: Modifier = Modifier
 ) {
-    val locale     = if (language == Language.ARABIC) Locale("ar") else Locale.ENGLISH
+    val locale = if (language == Language.ARABIC) Locale("ar") else Locale.ENGLISH
     val todayString = stringResource(R.string.label_today)
 
     val todayLabel = remember(timezoneOffset) {
         DateUtils.utcDateLabel(System.currentTimeMillis() / 1000L, timezoneOffset)
     }
 
-    // Keyed on BOTH forecastItems AND language — reruns when user changes locale
     val dailyGroups = remember(forecastItems, language) {
         forecastItems
             .groupBy { DateUtils.utcDateLabel(it.dt, timezoneOffset) }
@@ -71,17 +71,17 @@ fun DailyForecast(
             .take(5)
             .map { (dateKey, slots) ->
                 val rep = slots.minByOrNull {
-                    Math.abs((it.dt + timezoneOffset) % 86400 - 43200L)
+                    abs((it.dt + timezoneOffset) % 86400 - 43200L)
                 } ?: slots.first()
                 DailyRowData(
-                    dayLabel    = if (dateKey == todayLabel) todayString
+                    dayLabel = if (dateKey == todayLabel) todayString
                     else DateUtils.formatDayLabel(rep.dt, timezoneOffset, locale),
-                    dateLabel   = DateUtils.formatShortDate(rep.dt, timezoneOffset, locale),
-                    iconCode    = rep.weather.firstOrNull()?.icon.orEmpty(),
+                    dateLabel = DateUtils.formatShortDate(rep.dt, timezoneOffset, locale),
+                    iconCode = rep.weather.firstOrNull()?.icon.orEmpty(),
                     description = rep.weather.firstOrNull()?.description.orEmpty(),
-                    tempMax     = slots.maxOf { it.main.tempMax },
-                    tempMin     = slots.minOf { it.main.tempMin },
-                    isToday     = dateKey == todayLabel
+                    tempMax = slots.maxOf { it.main.tempMax },
+                    tempMin = slots.minOf { it.main.tempMin },
+                    isToday = dateKey == todayLabel
                 )
             }
     }
@@ -98,14 +98,14 @@ fun DailyForecast(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Icon(
-                imageVector        = Icons.Default.CalendarMonth,
+                imageVector = Icons.Default.CalendarMonth,
                 contentDescription = null,
-                tint               = MaterialTheme.colorScheme.primary,
-                modifier           = Modifier.size(20.dp)
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp)
             )
             Text(
-                text       = stringResource(R.string.label_5day),
-                style      = MaterialTheme.typography.titleMedium,
+                text = stringResource(R.string.label_5day),
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -136,65 +136,62 @@ private fun DailyRow(
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment     = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        // Day name + short date stacked
         Column(
-            modifier            = Modifier.weight(1.2f),
+            modifier = Modifier.weight(1.2f),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
-                text       = day.dayLabel.split(",").first(),   // strip any comma suffix
-                style      = MaterialTheme.typography.bodyMedium,
+                text = day.dayLabel.split(",").first(),
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = if (day.isToday) FontWeight.Bold else FontWeight.SemiBold,
-                color      = if (day.isToday) MaterialTheme.colorScheme.onBackground
+                color = if (day.isToday) MaterialTheme.colorScheme.onBackground
                 else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
             Text(
-                text          = day.dateLabel,   // now locale-aware: "Oct 23" or "23 أكتوبر"
-                fontSize      = 10.sp,
-                fontWeight    = FontWeight.SemiBold,
-                color         = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f),
+                text = day.dateLabel,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f),
                 letterSpacing = 0.8.sp
             )
         }
 
-        // Icon + description
         Row(
             modifier = Modifier
                 .weight(2f)
                 .padding(horizontal = 8.dp),
-            verticalAlignment     = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             AsyncImage(
-                model              = Constants.weatherIconUrl(day.iconCode),
+                model = Constants.weatherIconUrl(day.iconCode),
                 contentDescription = day.description,
-                modifier           = Modifier.size(28.dp),
-                contentScale       = ContentScale.Fit
+                modifier = Modifier.size(28.dp),
+                contentScale = ContentScale.Fit
             )
             Text(
-                text  = day.description.replaceFirstChar { it.uppercase() },
+                text = day.description.replaceFirstChar { it.uppercase() },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
         }
 
-        // High / Low — always LTR so numbers don't flip
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment     = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text       = UnitUtils.formatTemp(day.tempMax, temperatureUnit.symbol),
-                    style      = MaterialTheme.typography.bodyMedium,
+                    text = UnitUtils.formatTemp(day.tempMax, temperatureUnit.symbol),
+                    style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
-                    color      = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text  = UnitUtils.formatTemp(day.tempMin, temperatureUnit.symbol),
+                    text = UnitUtils.formatTemp(day.tempMin, temperatureUnit.symbol),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
                 )

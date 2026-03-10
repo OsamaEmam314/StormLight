@@ -1,10 +1,10 @@
 package com.example.stormlight.ui.screens.home.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stormlight.data.model.CurrentWeatherDto
 import com.example.stormlight.data.model.ForecastDto
+import com.example.stormlight.data.model.UserPrefrences
 import com.example.stormlight.data.prefrences.PrefrencesRepository
 import com.example.stormlight.data.weather.repository.WeatherRepository
 import com.example.stormlight.ui.screens.home.view.HomeUiState
@@ -14,7 +14,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -28,73 +27,65 @@ class HomeViewModel(
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
     private var latestWeather: CurrentWeatherDto? = null
     private var latestForecast: ForecastDto? = null
-
     private var weatherJob: Job? = null
 
-    init {
+    init { loadWeather() }
+
+
+    fun refresh() {
+        _isRefreshing.value = true
         loadWeather()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun loadWeather() {
         weatherJob?.cancel()
-        _uiState.value = HomeUiState.Loading
-
+        if (latestWeather == null || latestForecast == null) {
+            _uiState.value = HomeUiState.Loading
+        }
         weatherJob = viewModelScope.launch {
             prefrencesRepository.userPreferences
                 .flatMapLatest { prefs ->
                     val lat = prefs.lat.toDoubleOrNull()
                     val lon = prefs.lon.toDoubleOrNull()
                     val lang = prefs.language.language
-
                     if (lat == null || lon == null) {
-                        flowOf(HomeUiState.Error("Location not set. Please configure in Settings."))
+                        flowOf(Triple<Any, Any, UserPrefrences>(Resource.Error("Location not set."), Resource.Error(""), prefs))
                     } else {
-                        latestWeather = null
-                        latestForecast = null
                         combine(
                             weatherRepository.getCurrentWeather(lat, lon, lang),
                             weatherRepository.getForecast(lat, lon, lang)
-                        ) { weatherResource, forecastResource ->
-                            Triple(weatherResource, forecastResource, prefs)
-                        }
+                        ) { w, f -> Triple(w, f, prefs) }
                     }
                 }
-                .collectLatest { result ->
-                    if (result is HomeUiState) {
-                        _uiState.value = result
-                        return@collectLatest
-                    }
+                .collect { (rawW, rawF, latestPrefs) ->
+                    val wr = rawW as Resource<CurrentWeatherDto>
+                    val fr = rawF as Resource<ForecastDto>
 
-                    val (weatherResource, forecastResource, latestPrefs) =
-                        result as Triple<Resource<CurrentWeatherDto>, Resource<ForecastDto>, com.example.stormlight.data.model.UserPrefrences>
+                    if (wr is Resource.Success) latestWeather = wr.data
+                    if (fr is Resource.Success) latestForecast = fr.data
 
-                    if (weatherResource is Resource.Success) latestWeather = weatherResource.data
-                    if (forecastResource is Resource.Success) latestForecast = forecastResource.data
-
-                    val weather = latestWeather
-                    val forecast = latestForecast
-
-                    _uiState.value = when {
-                        weather != null && forecast != null -> HomeUiState.Success(
-                            currentWeather = weather,
-                            forecast = forecast,
-                            userPrefrences = latestPrefs
-                        )
-                        weatherResource is Resource.Error || forecastResource is Resource.Error ->
-                            HomeUiState.Error(
-                                (weatherResource as? Resource.Error)?.message
-                                    ?: (forecastResource as? Resource.Error)?.message
-                                    ?: "Unknown error"
-                            )
+                    val newState = when {
+                        latestWeather != null && latestForecast != null -> {
+                            HomeUiState.Success(latestWeather!!, latestForecast!!, latestPrefs)
+                        }
+                        wr is Resource.Error -> HomeUiState.Error(wr.message)
+                        fr is Resource.Error -> HomeUiState.Error(fr.message)
                         else -> HomeUiState.Loading
                     }
+                    if (wr !is Resource.Loading && fr !is Resource.Loading) {
+                        _isRefreshing.value = false
+                    }
+
+                    _uiState.value = newState
                 }
         }
     }
-
     fun setLocation(lat: Double, lon: Double) {
         viewModelScope.launch {
             prefrencesRepository.setLatitude(lat.toString())
@@ -104,3 +95,4 @@ class HomeViewModel(
 
     fun retry() = loadWeather()
 }
+
