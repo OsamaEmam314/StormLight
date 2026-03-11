@@ -1,4 +1,4 @@
-package com.example.stormlight.data.weather.datasource.local
+package com.example.stormlight.data.weather.local
 
 import com.example.stormlight.data.datastore.WeatherDataStore
 import com.example.stormlight.data.model.CurrentWeatherDto

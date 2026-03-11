@@ -59,4 +59,25 @@
     <string name="retry">Retry</string>
     <string name="label_now">Now</string>
     <string name="label_today">Today</string>
+
+    <string name="alerts_title">Alerts</string>
+    <string name="add_alert">Add Alert</string>
+    <string name="delete_alert">Delete Alert</string>
+    <string name="no_alerts_title">No alerts yet</string>
+    <string name="no_alerts_subtitle">Tap + to schedule your first weather alert</string>
+
+    <!-- Alert Dialog -->
+    <string name="create_alert_title">New Alert</string>
+    <string name="alert_label_hint">Label (optional)</string>
+    <string name="alert_type_label">Alert Type</string>
+    <string name="alert_type_notification">Notification</string>
+    <string name="alert_type_alarm">Alarm</string>
+    <string name="pick_time">Select Time</string>
+
+    <!-- Alert Notification Actions -->
+    <string name="action_snooze">Snooze 10 min</string>
+    <string name="action_dismiss">Dismiss</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_ok">OK</string>
 </resources>

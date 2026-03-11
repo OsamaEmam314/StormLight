@@ -37,8 +37,8 @@ import com.example.stormlight.R
 import com.example.stormlight.data.datastore.WeatherDataStore
 import com.example.stormlight.data.network.RetrofitClient
 import com.example.stormlight.data.prefrences.PrefrencesRepository
-import com.example.stormlight.data.weather.datasource.local.WeatherLocalDataSource
-import com.example.stormlight.data.weather.datasource.remote.WeatherRemoteDataSource
+import com.example.stormlight.data.weather.local.WeatherLocalDataSource
+import com.example.stormlight.data.weather.remote.WeatherRemoteDataSource
 import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
 import com.example.stormlight.ui.components.CurrentWeatherHeader
 import com.example.stormlight.ui.components.CurrentWeatherHero

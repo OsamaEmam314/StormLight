@@ -4,9 +4,8 @@ import android.util.Log
 import com.example.stormlight.data.model.CurrentWeatherDto
 import com.example.stormlight.data.model.ForecastDto
 import com.example.stormlight.data.model.GeoLocationDto
-import com.example.stormlight.data.weather.datasource.local.LocalDataSource
+import com.example.stormlight.data.weather.local.LocalDataSource
 import com.example.stormlight.data.weather.datasource.remote.RemoteDataSource
-import com.example.stormlight.utilities.Constants
 import com.example.stormlight.utilities.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull

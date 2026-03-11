@@ -1,4 +1,4 @@
-package com.example.stormlight.data.weather.datasource.remote
+package com.example.stormlight.data.weather.remote
 
 import com.example.stormlight.data.model.CurrentWeatherDto
 import com.example.stormlight.data.model.ForecastDto
@@ -8,7 +8,7 @@ import com.example.stormlight.utilities.Constants
 class WeatherRemoteDataSource(
     private val apiService: WeatherApiService
 ): RemoteDataSource {
-   override suspend fun getCurrentWeather(lat: Double, lon: Double, lang: String): CurrentWeatherDto{
+   override suspend fun getCurrentWeather(lat: Double, lon: Double, lang: String): CurrentWeatherDto {
         val response = apiService.getCurrentWeather(
             lat = lat,
             lon = lon,

@@ -60,4 +60,25 @@
     <string name="retry">إعادة المحاولة</string>
     <string name="label_now">الآن</string>
     <string name="label_today">اليوم</string>
+
+    <string name="alerts_title">التنبيهات</string>
+    <string name="add_alert">إضافة تنبيه</string>
+    <string name="delete_alert">حذف التنبيه</string>
+    <string name="no_alerts_title">لا توجد تنبيهات بعد</string>
+    <string name="no_alerts_subtitle">اضغط + لجدولة أول تنبيه طقس</string>
+
+    <!-- حوار إنشاء تنبيه -->
+    <string name="create_alert_title">تنبيه جديد</string>
+    <string name="alert_label_hint">التسمية (اختياري)</string>
+    <string name="alert_type_label">نوع التنبيه</string>
+    <string name="alert_type_notification">إشعار</string>
+    <string name="alert_type_alarm">منبه</string>
+    <string name="pick_time">اختر الوقت</string>
+
+    <!-- إجراءات الإشعار -->
+    <string name="action_snooze">تأجيل ١٠ دقائق</string>
+    <string name="action_dismiss">إغلاق</string>
+    <string name="action_save">حفظ</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="action_ok">موافق</string>
 </resources>

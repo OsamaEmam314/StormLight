@@ -1,9 +1,8 @@
-package com.example.stormlight.data.weather.datasource.remote
+package com.example.stormlight.data.weather.remote
 
 import com.example.stormlight.data.model.CurrentWeatherDto
 import com.example.stormlight.data.model.ForecastDto
 import com.example.stormlight.data.model.GeoLocationDto
-import com.example.stormlight.utilities.Constants
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

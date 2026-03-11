@@ -1,4 +1,4 @@
-package com.example.stormlight.data.weather.datasource.remote
+package com.example.stormlight.data.weather.remote
 
 import com.example.stormlight.data.model.CurrentWeatherDto
 import com.example.stormlight.data.model.ForecastDto
