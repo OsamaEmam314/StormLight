@@ -29,10 +29,9 @@ android {
             "OWM_API_KEY",
             "\"${localProperties.getProperty("OWM_API_KEY") ?: ""}\""
         )
-       // buildConfigField("String", "OWM_API_KEY", "\"${project.findProperty("OWM_API_KEY") ?: ""}\"")
-       // buildConfigField("String", "MAPS_API_KEY", "\"${project.findProperty("MAPS_API_KEY") ?: ""}\"")
+        // buildConfigField("String", "OWM_API_KEY", "\"${project.findProperty("OWM_API_KEY") ?: ""}\"")
+        // buildConfigField("String", "MAPS_API_KEY", "\"${project.findProperty("MAPS_API_KEY") ?: ""}\"")
 
-      // resourceConfigurations += listOf("en", "ar")
     }
 
     buildTypes {

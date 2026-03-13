@@ -19,6 +19,7 @@ interface WeatherRepository {
         lon: Double,
         lang: String
     ): Flow<Resource<ForecastDto>>
+
     suspend fun searchCity(query: String): Resource<List<GeoLocationDto>>
     suspend fun reverseGeocode(lat: Double, lon: Double): Resource<GeoLocationDto>
 }

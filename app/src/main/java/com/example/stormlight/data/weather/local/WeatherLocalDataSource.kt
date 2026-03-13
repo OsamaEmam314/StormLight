@@ -10,7 +10,8 @@ import kotlinx.coroutines.flow.map
 
 class WeatherLocalDataSource(
     private val weatherDataStore: WeatherDataStore,
-    private val gson: Gson = Gson()): LocalDataSource {
+    private val gson: Gson = Gson()
+) : LocalDataSource {
     override suspend fun saveCurrentWeather(dto: CurrentWeatherDto) {
         weatherDataStore.saveCurrentWeather(gson.toJson(dto))
     }
@@ -18,17 +19,17 @@ class WeatherLocalDataSource(
     override suspend fun saveForecast(dto: ForecastDto) {
         weatherDataStore.saveForecast(gson.toJson(dto))
     }
-    override val currentWeatherFlow: Flow<CurrentWeatherDto?> = weatherDataStore.currentWeatherFlow.map {
-        json ->
-        if (json == null) return@map null
-        try {
-            gson.fromJson(json, CurrentWeatherDto::class.java)
-        } catch (_: JsonSyntaxException) {
-            null
+
+    override val currentWeatherFlow: Flow<CurrentWeatherDto?> =
+        weatherDataStore.currentWeatherFlow.map { json ->
+            if (json == null) return@map null
+            try {
+                gson.fromJson(json, CurrentWeatherDto::class.java)
+            } catch (_: JsonSyntaxException) {
+                null
+            }
         }
-    }
-    override val forecastFlow: Flow<ForecastDto?> = weatherDataStore.forecastFlow.map {
-        json ->
+    override val forecastFlow: Flow<ForecastDto?> = weatherDataStore.forecastFlow.map { json ->
         if (json == null) return@map null
         try {
             gson.fromJson(json, ForecastDto::class.java)

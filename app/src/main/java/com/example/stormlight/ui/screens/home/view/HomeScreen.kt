@@ -43,7 +43,7 @@ import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
 import com.example.stormlight.ui.components.CurrentWeatherHeader
 import com.example.stormlight.ui.components.CurrentWeatherHero
 import com.example.stormlight.ui.components.MetricsGrid
-import com.example.stormlight.ui.screens.home.components.forecast.DailyForecast
+import com.example.stormlight.ui.components.DailyForecast
 import com.example.stormlight.ui.screens.home.components.forecast.HourlyForecast
 import com.example.stormlight.ui.screens.home.viewmodel.HomeViewModel
 import com.example.stormlight.ui.screens.home.viewmodel.HomeViewModelFactory
@@ -74,7 +74,7 @@ fun HomeScreen(
     PullToRefreshBox(
         state = pullRefreshState,
         isRefreshing = isRefreshing,
-        onRefresh    = { viewModel.refresh() },
+        onRefresh = { viewModel.refresh() },
         modifier = modifier.fillMaxSize(),
         indicator = {
             Indicator(

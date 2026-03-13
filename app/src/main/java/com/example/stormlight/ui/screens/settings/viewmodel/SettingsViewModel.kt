@@ -29,11 +29,13 @@ class SettingsViewModel(
             repository.setLanguage(language)
         }
     }
+
     fun setLocationSource(LocationSource: LocationSource) {
         viewModelScope.launch {
             repository.setLocationSource(LocationSource)
         }
     }
+
     fun setThemeMode(themeMode: ThemeMode) {
         viewModelScope.launch { repository.setThemeMode(themeMode) }
     }

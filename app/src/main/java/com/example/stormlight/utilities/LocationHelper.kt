@@ -52,6 +52,7 @@ object LocationHelper {
 
         awaitClose()
     }
+
     fun isLocationEnabled(context: Context): Boolean {
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return manager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||

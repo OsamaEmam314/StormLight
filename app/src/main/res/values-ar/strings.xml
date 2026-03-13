@@ -2,13 +2,11 @@
 <resources>
     <string name="app_name">ستورم لايت</string>
 
-    <!-- Bottom Navigation -->
     <string name="nav_home">الرئيسية</string>
     <string name="nav_favorites">المفضلة</string>
     <string name="nav_alerts">التنبيهات</string>
     <string name="nav_settings">الإعدادات</string>
 
-    <!-- Home Screen -->
     <string name="label_hourly">بالساعة</string>
     <string name="label_5day">توقعات 5 أيام</string>
     <string name="label_humidity">الرطوبة</string>
@@ -20,7 +18,6 @@
     <string name="label_sunrise">شروق الشمس</string>
     <string name="label_sunset">غروب الشمس</string>
 
-    <!-- Settings Screen -->
     <string name="settings_location">الموقع</string>
     <string name="settings_gps">GPS</string>
     <string name="settings_map">الخريطة</string>
@@ -30,7 +27,7 @@
     <string name="settings_theme">المظهر</string>
     <string name="settings_dark">الليل</string>
     <string name="settings_light">النهار</string>
-    <!-- Settings Screen - Units & Options -->
+
     <string name="settings_celsius">°م</string>
     <string name="settings_fahrenheit">°ف</string>
     <string name="settings_kelvin">ك</string>
@@ -39,13 +36,12 @@
     <string name="settings_system">تلقائي</string>
     <string name="settings_english">English</string>
     <string name="settings_arabic">العربية</string>
-    <!-- Favorites Screen -->
+
     <string name="favorites_empty">لا توجد مفضلة بعد.\nاضغط + لإضافة موقع.</string>
     <string name="favorites_add">إضافة موقع</string>
     <string name="favorites_search_hint">ابحث عن مدينة…</string>
     <string name="favorites_delete">حذف</string>
 
-    <!-- Alerts Screen -->
     <string name="alerts_create">إنشاء تنبيه</string>
     <string name="alerts_active">التنبيهات النشطة</string>
     <string name="alerts_empty">لا توجد تنبيهات مُعدَّة.</string>
@@ -55,7 +51,6 @@
     <string name="alerts_end">وقت الانتهاء</string>
     <string name="alerts_stop_all">إيقاف جميع الإشعارات</string>
 
-    <!-- Generic -->
     <string name="error_generic">حدث خطأ ما. يرجى المحاولة مجددًا.</string>
     <string name="retry">إعادة المحاولة</string>
     <string name="label_now">الآن</string>
@@ -67,7 +62,6 @@
     <string name="no_alerts_title">لا توجد تنبيهات بعد</string>
     <string name="no_alerts_subtitle">اضغط + لجدولة أول تنبيه طقس</string>
 
-    <!-- حوار إنشاء تنبيه -->
     <string name="create_alert_title">تنبيه جديد</string>
     <string name="alert_label_hint">التسمية (اختياري)</string>
     <string name="alert_type_label">نوع التنبيه</string>
@@ -75,17 +69,16 @@
     <string name="alert_type_alarm">منبه</string>
     <string name="pick_time">اختر الوقت</string>
 
-    <!-- إجراءات الإشعار -->
     <string name="action_snooze">تأجيل ١٠ دقائق</string>
     <string name="action_dismiss">إغلاق</string>
     <string name="action_save">حفظ</string>
     <string name="action_cancel">إلغاء</string>
     <string name="action_ok">موافق</string>
-    <!-- Arabic -->
+
     <string name="delete_alert_title">حذف التنبيه</string>
     <string name="delete_alert_message">هل أنت متأكد من حذف هذا التنبيه؟</string>
     <string name="action_delete">حذف</string>
-    <!-- Notifications -->
+
     <string name="channel_name_notification">تنبيهات الطقس</string>
     <string name="channel_desc_notification">إشعارات تنبيه الطقس الصامتة</string>
     <string name="channel_name_alarm">منبه الطقس</string>

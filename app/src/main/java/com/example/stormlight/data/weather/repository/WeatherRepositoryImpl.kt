@@ -23,8 +23,6 @@ class WeatherRepositoryImpl(
     ): Flow<Resource<CurrentWeatherDto>> = flow {
 
         emit(Resource.Loading)
-        Log.d("WeatherRepositoryImpl", "getCurrentWeather lat=$lat lon=$lon lang=$lang")
-
         val cached = localDataSource.currentWeatherFlow.firstOrNull()
         if (cached != null) emit(Resource.Success(cached))
         try {
@@ -32,20 +30,17 @@ class WeatherRepositoryImpl(
             val cityName = try {
                 remoteDataSource.reverseGeocode(lat, lon)?.name ?: fresh.name
             } catch (e: Exception) {
-                Log.w("WeatherRepositoryImpl", "reverseGeocode failed: ${e.message}")
                 fresh.name
             }
             try {
                 val geoResults = remoteDataSource.searchCity(cityName)
                 fresh.localNames = geoResults.firstOrNull()?.localNames
             } catch (e: Exception) {
-                Log.w("WeatherRepositoryImpl", "searchCity failed: ${e.message}")
             }
             localDataSource.saveCurrentWeather(fresh)
             emit(Resource.Success(fresh))
 
         } catch (e: Exception) {
-            Log.e("WeatherRepositoryImpl", "getCurrentWeather network error: ${e.message}")
             if (cached == null) emit(Resource.Error(e.message ?: "Unknown error occurred"))
         }
     }
@@ -66,7 +61,6 @@ class WeatherRepositoryImpl(
             localDataSource.saveForecast(fresh)
             emit(Resource.Success(fresh))
         } catch (e: Exception) {
-            Log.e("WeatherRepositoryImpl", "getForecast network error: ${e.message}")
             if (cached == null) emit(Resource.Error(e.message ?: "Unknown error occurred"))
         }
     }

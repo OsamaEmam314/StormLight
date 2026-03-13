@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-   private val repository: PrefrencesRepository
+    private val repository: PrefrencesRepository
 ) : ViewModel() {
     val userPrefs: StateFlow<UserPrefrences> = repository.userPreferences
         .stateIn(
@@ -19,11 +19,13 @@ class MainViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = UserPrefrences()
         )
+
     fun setLatitude(lat: String) {
         viewModelScope.launch {
             repository.setLatitude(lat)
         }
     }
+
     fun setLongitude(lon: String) {
         viewModelScope.launch {
             repository.setLongitude(lon)

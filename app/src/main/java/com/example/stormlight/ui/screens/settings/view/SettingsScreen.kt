@@ -1,7 +1,6 @@
 package com.example.stormlight.ui.screens.settings.view
 
 import android.util.Log
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -73,9 +72,9 @@ fun SettingsScreen() {
                 selected = prefs.temperatureUnit,
                 label = {
                     when (it) {
-                        TemperatureUnit.CELSIUS    -> stringResource(R.string.settings_celsius)
+                        TemperatureUnit.CELSIUS -> stringResource(R.string.settings_celsius)
                         TemperatureUnit.FAHRENHEIT -> stringResource(R.string.settings_fahrenheit)
-                        TemperatureUnit.KELVIN     -> stringResource(R.string.settings_kelvin)
+                        TemperatureUnit.KELVIN -> stringResource(R.string.settings_kelvin)
                     }
                 },
                 onSelect = {
@@ -90,7 +89,7 @@ fun SettingsScreen() {
                 selected = prefs.windSpeedUnit,
                 label = {
                     when (it) {
-                        WindSpeedUnit.METER_PER_SEC  -> stringResource(R.string.settings_meter_sec)
+                        WindSpeedUnit.METER_PER_SEC -> stringResource(R.string.settings_meter_sec)
                         WindSpeedUnit.MILES_PER_HOUR -> stringResource(R.string.settings_mph)
                     }
                 },
@@ -107,7 +106,7 @@ fun SettingsScreen() {
                 label = {
                     when (it) {
                         Language.ENGLISH -> stringResource(R.string.settings_english)
-                        Language.ARABIC  -> stringResource(R.string.settings_arabic)
+                        Language.ARABIC -> stringResource(R.string.settings_arabic)
                     }
                 },
                 onSelect = {
@@ -122,8 +121,8 @@ fun SettingsScreen() {
                 selected = prefs.themeMode,
                 label = {
                     when (it) {
-                        ThemeMode.LIGHT  -> stringResource(R.string.settings_light)
-                        ThemeMode.DARK   -> stringResource(R.string.settings_dark)
+                        ThemeMode.LIGHT -> stringResource(R.string.settings_light)
+                        ThemeMode.DARK -> stringResource(R.string.settings_dark)
                     }
                 },
                 onSelect = {
@@ -133,6 +132,7 @@ fun SettingsScreen() {
         }
     }
 }
+
 @Composable
 fun SettingsSection(
     title: String,
@@ -166,14 +166,13 @@ private fun <T> StormSegmentedRow(
                 selected = isSelected,
                 onClick = { onSelect(option) },
                 colors = SegmentedButtonDefaults.colors(
-                    activeContainerColor  = MaterialTheme.colorScheme.primary,
-                    activeContentColor    = MaterialTheme.colorScheme.onPrimary,
-                    activeBorderColor     = MaterialTheme.colorScheme.primary,
+                    activeContainerColor = MaterialTheme.colorScheme.primary,
+                    activeContentColor = MaterialTheme.colorScheme.onPrimary,
+                    activeBorderColor = MaterialTheme.colorScheme.primary,
                     inactiveContainerColor = MaterialTheme.colorScheme.surface,
-                    inactiveContentColor  = MaterialTheme.colorScheme.onSurfaceVariant,
-                    inactiveBorderColor   = MaterialTheme.colorScheme.outline
+                    inactiveContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    inactiveBorderColor = MaterialTheme.colorScheme.outline
                 ),
-            //    icon = {},
                 label = {
                     Text(
                         text = label(option),

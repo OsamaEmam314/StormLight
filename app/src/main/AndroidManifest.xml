@@ -31,9 +31,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".alarmmanager.AlertReceiver"/>
-        <receiver android:name=".alarmmanager.DismissAlarmReceiver"/>
-        <receiver android:name=".alarmmanager.SnoozeAlarmReceiver"/>
+
+        <receiver android:name=".alarmmanager.AlertReceiver" />
+        <receiver android:name=".alarmmanager.DismissAlarmReceiver" />
+        <receiver android:name=".alarmmanager.SnoozeAlarmReceiver" />
 
         <meta-data
             android:name="preloaded_fonts"

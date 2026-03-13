@@ -38,6 +38,7 @@ sealed class StormlightDestinations(
         selectedIcon = Icons.Filled.Favorite,
         unselectedIcon = Icons.Outlined.FavoriteBorder,
     )
+
     data object Alerts : StormlightDestinations(
         route = "alerts",
         labelResId = com.example.stormlight.R.string.nav_alerts,

@@ -14,4 +14,4 @@ data class AlertEntity(
     val isEnabled: Boolean = true,
     val label: String = ""
 
-    )
+)

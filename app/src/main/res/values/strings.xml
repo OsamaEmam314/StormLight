@@ -2,13 +2,11 @@
 <resources>
     <string name="app_name">StormLight</string>
 
-    <!-- Bottom Navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_favorites">Favorites</string>
     <string name="nav_alerts">Alerts</string>
     <string name="nav_settings">Settings</string>
 
-    <!-- Home Screen -->
     <string name="label_hourly">Hourly</string>
     <string name="label_5day">5-Day Outlook</string>
     <string name="label_humidity">Humidity</string>
@@ -20,7 +18,6 @@
     <string name="label_sunrise">Sunrise</string>
     <string name="label_sunset">Sunset</string>
 
-    <!-- Settings Screen -->
     <string name="settings_location">Location</string>
     <string name="settings_gps">GPS</string>
     <string name="settings_map">Map</string>
@@ -38,13 +35,12 @@
     <string name="settings_system">System</string>
     <string name="settings_english">English</string>
     <string name="settings_arabic">العربية</string>
-    <!-- Favorites Screen -->
+
     <string name="favorites_empty">No favorites yet.\nTap + to add a location.</string>
     <string name="favorites_add">Add Location</string>
     <string name="favorites_search_hint">Search for a city…</string>
     <string name="favorites_delete">Remove</string>
 
-    <!-- Alerts Screen -->
     <string name="alerts_create">Create Alert</string>
     <string name="alerts_active">Active Alerts</string>
     <string name="alerts_empty">No alerts configured.</string>
@@ -54,7 +50,6 @@
     <string name="alerts_end">End Time</string>
     <string name="alerts_stop_all">Stop All Notifications</string>
 
-    <!-- Generic -->
     <string name="error_generic">Something went wrong. Please try again.</string>
     <string name="retry">Retry</string>
     <string name="label_now">Now</string>
@@ -66,7 +61,6 @@
     <string name="no_alerts_title">No alerts yet</string>
     <string name="no_alerts_subtitle">Tap + to schedule your first weather alert</string>
 
-    <!-- Alert Dialog -->
     <string name="create_alert_title">New Alert</string>
     <string name="alert_label_hint">Label (optional)</string>
     <string name="alert_type_label">Alert Type</string>
@@ -74,7 +68,6 @@
     <string name="alert_type_alarm">Alarm</string>
     <string name="pick_time">Select Time</string>
 
-    <!-- Alert Notification Actions -->
     <string name="action_snooze">Snooze 10 min</string>
     <string name="action_dismiss">Dismiss</string>
     <string name="action_save">Save</string>
@@ -85,7 +78,6 @@
     <string name="delete_alert_message">Are you sure you want to delete this alert?</string>
     <string name="action_delete">Delete</string>
 
-    <!-- Notifications -->
     <string name="channel_name_notification">Weather Alerts</string>
     <string name="channel_desc_notification">Silent weather alert notifications</string>
     <string name="channel_name_alarm">Weather Alarm</string>

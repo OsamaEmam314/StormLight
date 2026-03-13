@@ -18,7 +18,9 @@ class PrefrencesRepository(private val context: Context) {
     suspend fun setThemeMode(themeMode: ThemeMode) = localDataSource.setThemeMode(themeMode)
     suspend fun setTemperatureUnit(unit: TemperatureUnit) = localDataSource.setTemperatureUnit(unit)
     suspend fun setWindSpeedUnit(unit: WindSpeedUnit) = localDataSource.setWindSpeedUnit(unit)
-    suspend fun setLocationSource(source: LocationSource) = localDataSource.setLocationSource(source)
+    suspend fun setLocationSource(source: LocationSource) =
+        localDataSource.setLocationSource(source)
+
     suspend fun setLatitude(lat: String) = localDataSource.setLatitude(lat)
     suspend fun setLongitude(lon: String) = localDataSource.setLongitude(lon)
 }

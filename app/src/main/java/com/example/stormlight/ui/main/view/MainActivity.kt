@@ -3,7 +3,6 @@ package com.example.stormlight.ui.main.view
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -68,8 +67,8 @@ class MainActivity : ComponentActivity() {
         val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
         if (granted) fetchAndSaveGpsLocation()
-        else Log.w("MainActivity", "Location permission denied")
     }
+
     private fun requestLocationIfNeeded() {
         CoroutineScope(Dispatchers.IO).launch {
             val prefs = repository.userPreferences.first()
@@ -87,17 +86,16 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     fun fetchAndSaveGpsLocation() {
         if (!LocationHelper.isLocationEnabled(this)) {
-            Log.w("MainActivity", "Location services disabled on device")
             return
         }
         CoroutineScope(Dispatchers.IO).launch {
-            LocationHelper.getCurrentLocation(applicationContext).collect { latLon->
+            LocationHelper.getCurrentLocation(applicationContext).collect { latLon ->
                 if (latLon != null) {
                     mainViewModel.setLatitude(latLon.lat.toString())
                     mainViewModel.setLongitude(latLon.lon.toString())
-                    Log.d("MainActivity", "Location fetched: ${latLon.lat}, ${latLon.lon}")
                 }
 
             }
@@ -119,11 +117,10 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(prefs.language) {
                 val currentLocale = AppCompatDelegate.getApplicationLocales().toLanguageTags()
                 if (currentLocale != prefs.language.language) {
-                    Log.d("pref from main", "Applying language: ${prefs.language.language}")
                     LocaleUtils.applyLocale(prefs.language, applicationContext)
                 }
             }
-            val darkMode = when(prefs.themeMode) {
+            val darkMode = when (prefs.themeMode) {
                 ThemeMode.LIGHT -> false
                 ThemeMode.DARK -> true
             }
@@ -139,16 +136,17 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StormLightApp(){
+fun StormLightApp() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     Scaffold(
         topBar = {
-            val  destTitle = currentDestination?.route ?: StormlightDestinations.Home.route
+            val destTitle = currentDestination?.route ?: StormlightDestinations.Home.route
             if (destTitle == StormlightDestinations.Settings.route) {
                 CenterAlignedTopAppBar(
                     title = {
@@ -157,7 +155,7 @@ fun StormLightApp(){
                         )
                     },
 
-                )
+                    )
             }
             if (destTitle == StormlightDestinations.Alerts.route) {
                 CenterAlignedTopAppBar(
@@ -174,9 +172,10 @@ fun StormLightApp(){
             NavigationBar(
                 containerColor = MaterialTheme.colorScheme.surface,
                 tonalElevation = Dp(0f),
-            ){
+            ) {
                 StormlightDestinations.all.forEach { destination ->
-                    var selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true
+                    var selected =
+                        currentDestination?.hierarchy?.any { it.route == destination.route } == true
                     NavigationBarItem(
                         selected = selected,
                         icon = {
@@ -211,8 +210,7 @@ fun StormLightApp(){
             }
         },
 
-    ) {
-        innerPadding ->
+        ) { innerPadding ->
         AppNavGraph(
             navController = navController,
             modifier = Modifier.padding(innerPadding),

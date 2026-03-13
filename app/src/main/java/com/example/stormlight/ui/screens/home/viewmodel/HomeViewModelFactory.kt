@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.stormlight.data.prefrences.PrefrencesRepository
 import com.example.stormlight.data.weather.repository.WeatherRepository
 
-class HomeViewModelFactory (
+class HomeViewModelFactory(
     private val weatherRepository: WeatherRepository,
     private val prefrencesRepository: PrefrencesRepository
 ) : ViewModelProvider.Factory {

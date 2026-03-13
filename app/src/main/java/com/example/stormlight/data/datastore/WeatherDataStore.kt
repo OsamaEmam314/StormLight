@@ -15,18 +15,22 @@ private val Context.weatherDataStore: DataStore<Preferences>
 
 class WeatherDataStore(private val context: Context) {
     companion object {
-        val KEY_CURRENT_JSON  = stringPreferencesKey("current_weather_json")
+        val KEY_CURRENT_JSON = stringPreferencesKey("current_weather_json")
         val KEY_FORECAST_JSON = stringPreferencesKey("forecast_json")
     }
-    suspend fun saveCurrentWeather(curr : String){
+
+    suspend fun saveCurrentWeather(curr: String) {
         context.weatherDataStore.edit { it[KEY_CURRENT_JSON] = curr }
     }
-    suspend fun saveForecast(forecast : String){
+
+    suspend fun saveForecast(forecast: String) {
         context.weatherDataStore.edit { it[KEY_FORECAST_JSON] = forecast }
     }
-    val currentWeatherFlow: Flow<String?> = context.weatherDataStore.data.map { it[KEY_CURRENT_JSON]  }
-    val forecastFlow: Flow<String?> = context.weatherDataStore.data.map { it[KEY_FORECAST_JSON]  }
-    suspend fun clear(){
+
+    val currentWeatherFlow: Flow<String?> =
+        context.weatherDataStore.data.map { it[KEY_CURRENT_JSON] }
+    val forecastFlow: Flow<String?> = context.weatherDataStore.data.map { it[KEY_FORECAST_JSON] }
+    suspend fun clear() {
         context.weatherDataStore.edit { it.clear() }
     }
 

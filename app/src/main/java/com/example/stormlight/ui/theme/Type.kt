@@ -23,7 +23,6 @@ val Typography = Typography(
         lineHeight = 96.sp,
         letterSpacing = (-4).sp
     ),
-    // Temperature number
     displayMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
@@ -31,7 +30,6 @@ val Typography = Typography(
         lineHeight = 72.sp,
         letterSpacing = (-2).sp
     ),
-    // Section headers — "Hourly", "5-Day Outlook"
     displaySmall = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
@@ -39,7 +37,6 @@ val Typography = Typography(
         lineHeight = 44.sp,
         letterSpacing = (-1).sp
     ),
-    // Screen title / city name large
     headlineLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
@@ -47,7 +44,6 @@ val Typography = Typography(
         lineHeight = 40.sp,
         letterSpacing = (-0.5).sp
     ),
-    // Card headers
     headlineMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.SemiBold,
@@ -55,7 +51,6 @@ val Typography = Typography(
         lineHeight = 32.sp,
         letterSpacing = 0.sp
     ),
-    // Section titles — "Favorites", "Settings"
     headlineSmall = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
@@ -63,7 +58,6 @@ val Typography = Typography(
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
-    // Card title — city name in favorites list
     titleLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
@@ -71,7 +65,6 @@ val Typography = Typography(
         lineHeight = 26.sp,
         letterSpacing = (-0.25).sp
     ),
-    // Metric labels — "Humidity", "Wind"
     titleMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.SemiBold,
@@ -79,7 +72,6 @@ val Typography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
     ),
-    // Secondary labels
     titleSmall = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Medium,
@@ -87,7 +79,6 @@ val Typography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.1.sp
     ),
-    // Body text — weather description
     bodyLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Normal,
@@ -95,7 +86,6 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp
     ),
-    // General body
     bodyMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Normal,
@@ -103,7 +93,6 @@ val Typography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp
     ),
-    // Small body — timestamps, subtitles
     bodySmall = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Normal,
@@ -111,7 +100,6 @@ val Typography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp
     ),
-    // Button text
     labelLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
@@ -119,7 +107,6 @@ val Typography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
     ),
-    // Uppercase tags — "NOW", "11 AM", unit labels
     labelMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.SemiBold,
@@ -127,7 +114,6 @@ val Typography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.8.sp
     ),
-    // Bottom nav labels, micro text
     labelSmall = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Medium,

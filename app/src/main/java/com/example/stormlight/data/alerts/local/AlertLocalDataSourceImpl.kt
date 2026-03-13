@@ -21,6 +21,7 @@ class AlertLocalDataSourceImpl(
 
     override suspend fun getAlertById(alertId: Int): AlertEntity? =
         alertDao.getAlertById(alertId)
+
     override suspend fun getAlertByTime(hour: Int, minute: Int): AlertEntity? =
         alertDao.getAlertByTime(hour, minute)
 

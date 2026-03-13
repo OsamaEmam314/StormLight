@@ -61,12 +61,13 @@ fun CurrentWeatherHeader(
                 Text(
                     text = cityName,
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold)
-                }
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Default.DateRange,
                     contentDescription = null,

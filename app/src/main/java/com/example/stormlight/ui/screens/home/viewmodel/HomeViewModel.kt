@@ -34,7 +34,9 @@ class HomeViewModel(
     private var latestForecast: ForecastDto? = null
     private var weatherJob: Job? = null
 
-    init { loadWeather() }
+    init {
+        loadWeather()
+    }
 
 
     fun refresh() {
@@ -55,7 +57,13 @@ class HomeViewModel(
                     val lon = prefs.lon.toDoubleOrNull()
                     val lang = prefs.language.language
                     if (lat == null || lon == null) {
-                        flowOf(Triple<Any, Any, UserPrefrences>(Resource.Error("Location not set."), Resource.Error(""), prefs))
+                        flowOf(
+                            Triple<Any, Any, UserPrefrences>(
+                                Resource.Error("Location not set."),
+                                Resource.Error(""),
+                                prefs
+                            )
+                        )
                     } else {
                         combine(
                             weatherRepository.getCurrentWeather(lat, lon, lang),
@@ -74,6 +82,7 @@ class HomeViewModel(
                         latestWeather != null && latestForecast != null -> {
                             HomeUiState.Success(latestWeather!!, latestForecast!!, latestPrefs)
                         }
+
                         wr is Resource.Error -> HomeUiState.Error(wr.message)
                         fr is Resource.Error -> HomeUiState.Error(fr.message)
                         else -> HomeUiState.Loading
@@ -84,12 +93,6 @@ class HomeViewModel(
 
                     _uiState.value = newState
                 }
-        }
-    }
-    fun setLocation(lat: Double, lon: Double) {
-        viewModelScope.launch {
-            prefrencesRepository.setLatitude(lat.toString())
-            prefrencesRepository.setLongitude(lon.toString())
         }
     }
 

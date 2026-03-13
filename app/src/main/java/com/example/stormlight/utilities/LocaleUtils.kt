@@ -9,9 +9,9 @@ import androidx.core.os.LocaleListCompat
 import com.example.stormlight.utilities.enums.Language
 
 object LocaleUtils {
-    fun applyLocale(language: Language, context: Context){
+    fun applyLocale(language: Language, context: Context) {
         val localeList = LocaleListCompat.forLanguageTags(language.language)
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             context.getSystemService(LocaleManager::class.java).applicationLocales =
                 LocaleList.forLanguageTags(language.language)
         } else {

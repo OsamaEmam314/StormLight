@@ -16,7 +16,12 @@ class AlertViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AlertViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AlertViewModel(alertRepository, alertScheduler, weatherRepository, prefrencesRepository) as T
+            return AlertViewModel(
+                alertRepository,
+                alertScheduler,
+                weatherRepository,
+                prefrencesRepository
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

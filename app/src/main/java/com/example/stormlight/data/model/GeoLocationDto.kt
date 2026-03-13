@@ -10,7 +10,4 @@ data class GeoLocationDto(
     val lon: Double,
     val country: String,
     val state: String? = null
-) {
-    fun localizedName(langCode: String): String =
-        localNames?.get(langCode) ?: name
-}
+)

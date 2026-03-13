@@ -12,8 +12,9 @@ import com.example.stormlight.data.model.AlertEntity
     version = 1,
     exportSchema = false
 )
-abstract class StormLightDatabase: RoomDatabase() {
+abstract class StormLightDatabase : RoomDatabase() {
     abstract fun alertDao(): AlertDao
+
     // abstract fun favoriteDao(): FavoriteDao
     companion object {
         const val DATABASE_NAME = "stormlight_db"
