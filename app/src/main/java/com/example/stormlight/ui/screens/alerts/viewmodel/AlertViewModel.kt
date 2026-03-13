@@ -9,21 +9,29 @@ import com.example.stormlight.alarmmanager.StormLightAlarmScheduler
 import com.example.stormlight.data.alerts.repository.AlertRepository
 import com.example.stormlight.data.model.AlertEntity
 import com.example.stormlight.data.model.AlertItem
+import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.weather.repository.WeatherRepository
 import com.example.stormlight.ui.screens.alerts.view.AlertUiState
 import com.example.stormlight.ui.screens.alerts.view.CreateAlertDialogState
+import com.example.stormlight.utilities.Resource
+import com.example.stormlight.utilities.UnitUtils
 import com.example.stormlight.utilities.enums.AlertType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.util.Calendar
 
 class AlertViewModel(
     private val alertRepository: AlertRepository,
-    private val alertScheduler: StormLightAlarmScheduler
+    private val alertScheduler: StormLightAlarmScheduler,
+    private val weatherRepository: WeatherRepository,
+    private val prefrencesRepository: PrefrencesRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AlertUiState())
@@ -44,7 +52,13 @@ class AlertViewModel(
                     _uiState.update { it.copy(isLoading = false, errorMessage = e.message) }
                 }
                 .collect { alerts ->
-                    _uiState.update { it.copy(isLoading = false, alerts = alerts, errorMessage = null) }
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            alerts = alerts,
+                            errorMessage = null
+                        )
+                    }
                 }
         }
     }
@@ -93,16 +107,46 @@ class AlertViewModel(
             alertRepository.addAlert(alert)
             val inserted = alertRepository.getAlertByTime(state.selectedHour, state.selectedMinute)
             if (inserted != null) {
-                val item = AlertItem(
-                    id = inserted.id,
-                    time = LocalDateTime.now()
-                        .withHour(inserted.hour)
-                        .withMinute(inserted.minute)
-                        .withSecond(0),
-                    type = inserted.type,
-                    message = inserted.label
+                val prefs = prefrencesRepository.userPreferences.first()
+                val lat = prefs.lat.toDoubleOrNull()
+                val lon = prefs.lon.toDoubleOrNull()
+
+                var temp = ""
+                var weatherDesc = ""
+                var weatherIcon = ""
+
+                if (lat != null && lon != null) {
+                    val weatherResult = weatherRepository
+                        .getCurrentWeather(lat, lon, prefs.language.language)
+                        .first { it !is Resource.Loading }
+
+                    if (weatherResult is Resource.Success) {
+                        val data = weatherResult.data
+                        val convertedTemp = UnitUtils.convertTemp(
+                            data.main.temp,
+                            prefs.temperatureUnit.symbol
+                        ).toInt()
+                        val symbol = UnitUtils.tempSymbol(prefs.temperatureUnit)
+                        temp = "$convertedTemp$symbol"
+                        weatherDesc = data.weather.firstOrNull()?.description
+                            ?.replaceFirstChar { it.uppercase() }
+                            .orEmpty()
+                        weatherIcon = data.weather.firstOrNull()?.icon.orEmpty()
+                    }
+                }
+                alertScheduler.scheduleAlert(
+                    AlertItem(
+                        id = inserted.id,
+                        triggerAtMillis = resolveNextAlarmMillis(inserted.hour, inserted.minute),
+                        type = inserted.type,
+                        message = inserted.label,
+                        hour = inserted.hour,
+                        minute = inserted.minute,
+                        temp = temp,
+                        weatherDesc = weatherDesc,
+                        weatherIcon = weatherIcon
+                    )
                 )
-                alertScheduler.scheduleAlert(item)
             }
             hideCreateDialog()
         }
@@ -121,17 +165,18 @@ class AlertViewModel(
         }
     }
 
-
-    class Factory(
-        private val alertRepository: AlertRepository,
-        private val alertScheduler: StormLightAlarmScheduler
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(AlertViewModel::class.java)) {
-                return AlertViewModel(alertRepository, alertScheduler) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
+    private fun resolveNextAlarmMillis(hour: Int, minute: Int): Long {
+        val now = Calendar.getInstance()
+        val target = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
         }
+        if (target.timeInMillis < now.timeInMillis - 60_000L) {
+            target.add(Calendar.DAY_OF_YEAR, 1)
+        }
+        return target.timeInMillis
     }
+
 }

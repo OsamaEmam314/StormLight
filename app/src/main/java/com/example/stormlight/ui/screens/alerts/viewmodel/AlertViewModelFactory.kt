@@ -4,15 +4,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.stormlight.alarmmanager.StormLightAlarmScheduler
 import com.example.stormlight.data.alerts.repository.AlertRepository
+import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.weather.repository.WeatherRepository
 
 class AlertViewModelFactory(
     private val alertRepository: AlertRepository,
-    private val alertScheduler: StormLightAlarmScheduler
+    private val alertScheduler: StormLightAlarmScheduler,
+    private val weatherRepository: WeatherRepository,
+    private val prefrencesRepository: PrefrencesRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AlertViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AlertViewModel(alertRepository, alertScheduler) as T
+            return AlertViewModel(alertRepository, alertScheduler, weatherRepository, prefrencesRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

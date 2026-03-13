@@ -30,19 +30,8 @@ object Constants {
     const val LOCATION_GPS = "gps"
     const val LOCATION_MAP = "map"
 
-    // Notification Channels
-    const val CHANNEL_ID_NOTIFICATION = "stormlight_notification_channel"
-    const val CHANNEL_ID_ALARM = "stormlight_alarm_channel"
-
-    // Intent / Worker Data Keys
-    const val EXTRA_ALERT_ID = "extra_alert_id"
-    const val EXTRA_ALERT_TYPE = "extra_alert_type"
-    const val EXTRA_ALERT_LABEL = "extra_alert_label"
-
-    // Notification Actions
-    const val ACTION_DISMISS_ALARM = "com.example.stormlight.ACTION_DISMISS_ALARM"
-    const val ACTION_SNOOZE_ALARM = "com.example.stormlight.ACTION_SNOOZE_ALARM"
-
     // Snooze Duration (10 minutes)
-    const val SNOOZE_DURATION_MILLIS = 10 * 60 * 1000L
+    const val SNOOZE_DURATION_MS = 10 * 60 * 1000L
+    const val CHANNEL_ID_NOTIFICATION = "stormlight_weather_alerts_v5"
+    const val CHANNEL_ID_ALARM = "stormlight_alarm_sound_v11"
 }

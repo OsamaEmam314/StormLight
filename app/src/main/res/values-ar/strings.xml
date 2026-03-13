@@ -85,4 +85,12 @@
     <string name="delete_alert_title">حذف التنبيه</string>
     <string name="delete_alert_message">هل أنت متأكد من حذف هذا التنبيه؟</string>
     <string name="action_delete">حذف</string>
+    <!-- Notifications -->
+    <string name="channel_name_notification">تنبيهات الطقس</string>
+    <string name="channel_desc_notification">إشعارات تنبيه الطقس الصامتة</string>
+    <string name="channel_name_alarm">منبه الطقس</string>
+    <string name="channel_desc_alarm">تنبيهات الطقس بصوت المنبه</string>
+    <string name="notification_title">تنبيه طقس ستورم لايت</string>
+    <string name="alarm_title">منبه ستورم لايت</string>
+    <string name="alarm_dismiss">إيقاف</string>
 </resources>

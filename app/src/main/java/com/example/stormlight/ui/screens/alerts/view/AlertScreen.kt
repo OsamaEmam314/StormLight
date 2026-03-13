@@ -72,8 +72,14 @@ import com.example.stormlight.R
 import com.example.stormlight.alarmmanager.StormLightAlarmSchedulerImpl
 import com.example.stormlight.data.alerts.local.AlertLocalDataSourceImpl
 import com.example.stormlight.data.alerts.repository.AlertRepositoryImpl
+import com.example.stormlight.data.datastore.WeatherDataStore
 import com.example.stormlight.data.db.StormLightDatabase
 import com.example.stormlight.data.model.AlertEntity
+import com.example.stormlight.data.network.RetrofitClient
+import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.weather.local.WeatherLocalDataSource
+import com.example.stormlight.data.weather.remote.WeatherRemoteDataSource
+import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
 import com.example.stormlight.ui.screens.alerts.viewmodel.AlertViewModel
 import com.example.stormlight.ui.screens.alerts.viewmodel.AlertViewModelFactory
 import com.example.stormlight.utilities.DateUtils.formatAlertTime
@@ -92,9 +98,18 @@ fun AlertsScreen(
                     StormLightDatabase.getInstance(context).alertDao()
                 )
             ),
-            alertScheduler = StormLightAlarmSchedulerImpl(context)
+            alertScheduler = StormLightAlarmSchedulerImpl(context),
+            weatherRepository = WeatherRepositoryImpl(
+                WeatherRemoteDataSource(
+                    RetrofitClient.weatherApiService
+                ),
+                WeatherLocalDataSource(
+                    WeatherDataStore(context)
+                )
+            ),
+            prefrencesRepository = PrefrencesRepository(context)
 
-    )
+        )
     )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
@@ -108,9 +123,11 @@ fun AlertsScreen(
             uiState.isLoading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
+
             uiState.alerts.isEmpty() -> {
                 AlertEmptyState(modifier = Modifier.align(Alignment.Center))
             }
+
             else -> {
                 LazyColumn(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
@@ -177,6 +194,7 @@ fun AlertsScreen(
         )
     }
 }
+
 @Composable
 private fun AlertCard(
     alert: AlertEntity,
@@ -222,13 +240,14 @@ private fun AlertCard(
             Column(modifier = Modifier.weight(1f)) {
                 androidx.compose.runtime.CompositionLocalProvider(
                     LocalLayoutDirection provides LayoutDirection.Ltr
-                ){
-                Text(
-                    text = formatAlertTime(alert.hour, alert.minute),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )}
+                ) {
+                    Text(
+                        text = formatAlertTime(alert.hour, alert.minute),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
                 if (alert.label.isNotEmpty()) {
                     Text(
                         text = alert.label,
@@ -441,7 +460,11 @@ private fun CreateAlertDialog(
                                     shape = RoundedCornerShape(12.dp),
                                     contentPadding = PaddingValues(horizontal = 8.dp)
                                 ) {
-                                    Icon(icon, contentDescription = null, modifier = Modifier.size(16.dp))
+                                    Icon(
+                                        icon,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(16.dp)
+                                    )
                                     Spacer(Modifier.width(4.dp))
                                     Text(
                                         label,
@@ -459,7 +482,11 @@ private fun CreateAlertDialog(
                                     shape = RoundedCornerShape(12.dp),
                                     contentPadding = PaddingValues(horizontal = 8.dp)
                                 ) {
-                                    Icon(icon, contentDescription = null, modifier = Modifier.size(16.dp))
+                                    Icon(
+                                        icon,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(16.dp)
+                                    )
                                     Spacer(Modifier.width(4.dp))
                                     Text(
                                         label,

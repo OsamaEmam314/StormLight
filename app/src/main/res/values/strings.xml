@@ -84,4 +84,13 @@
     <string name="delete_alert_title">Delete Alert</string>
     <string name="delete_alert_message">Are you sure you want to delete this alert?</string>
     <string name="action_delete">Delete</string>
+
+    <!-- Notifications -->
+    <string name="channel_name_notification">Weather Alerts</string>
+    <string name="channel_desc_notification">Silent weather alert notifications</string>
+    <string name="channel_name_alarm">Weather Alarm</string>
+    <string name="channel_desc_alarm">Alarm sound weather alerts</string>
+    <string name="notification_title">StormLight Weather Alert</string>
+    <string name="alarm_title">StormLight Alarm</string>
+    <string name="alarm_dismiss">Dismiss</string>
 </resources>

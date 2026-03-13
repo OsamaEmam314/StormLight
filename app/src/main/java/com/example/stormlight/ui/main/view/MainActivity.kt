@@ -1,6 +1,7 @@
 package com.example.stormlight.ui.main.view
 
 import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -8,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -42,6 +44,7 @@ import com.example.stormlight.ui.main.viewmodel.MainViewModelFactory
 import com.example.stormlight.ui.navigation.StormlightDestinations
 import com.example.stormlight.utilities.LocaleUtils
 import com.example.stormlight.utilities.LocationHelper
+import com.example.stormlight.utilities.NotificationHelper
 import com.example.stormlight.utilities.PermissionUtils
 import com.example.stormlight.utilities.enums.LocationSource
 import com.example.stormlight.utilities.enums.ThemeMode
@@ -101,10 +104,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
+        NotificationHelper.createNotificationChannels(this)
 
         enableEdgeToEdge()
         requestLocationIfNeeded()
@@ -134,6 +139,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StormLightApp(){
