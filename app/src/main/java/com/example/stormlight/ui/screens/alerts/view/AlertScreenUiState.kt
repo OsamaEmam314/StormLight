@@ -16,10 +16,3 @@ data class CreateAlertDialogState(
     val selectedType: AlertType = AlertType.NOTIFICATION,
     val label: String = ""
 )
-
-sealed class AlertEvent {
-    data class ShowSnackbar(val message: String) : AlertEvent()
-    data class AlarmScheduled(val alertId: Int, val hour: Int, val minute: Int) : AlertEvent()
-    data class AlarmCancelled(val alertId: Int) : AlertEvent()
-    object AlertDeleted : AlertEvent()
-}

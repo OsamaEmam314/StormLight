@@ -81,4 +81,8 @@
     <string name="action_save">حفظ</string>
     <string name="action_cancel">إلغاء</string>
     <string name="action_ok">موافق</string>
+    <!-- Arabic -->
+    <string name="delete_alert_title">حذف التنبيه</string>
+    <string name="delete_alert_message">هل أنت متأكد من حذف هذا التنبيه؟</string>
+    <string name="action_delete">حذف</string>
 </resources>

@@ -75,4 +75,11 @@ object DateUtils {
         sdf.timeZone = TimeZone.getTimeZone("UTC")
         return sdf.format(Date(localEpoch))
     }
+
+     fun formatAlertTime(hour: Int, minute: Int): String {
+        val h = if (hour % 12 == 0) 12 else hour % 12
+        val m = minute.toString().padStart(2, '0')
+        val amPm = if (hour < 12) "AM" else "PM"
+        return "$h:$m $amPm"
+    }
 }

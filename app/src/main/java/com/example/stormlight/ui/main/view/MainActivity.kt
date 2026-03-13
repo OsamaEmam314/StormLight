@@ -153,6 +153,16 @@ fun StormLightApp(){
 
                 )
             }
+            if (destTitle == StormlightDestinations.Alerts.route) {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(R.string.nav_alerts),
+                        )
+                    },
+
+                    )
+            }
         },
         bottomBar = {
             NavigationBar(
