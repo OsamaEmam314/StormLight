@@ -1,9 +1,9 @@
 package com.example.stormlight.data.prefrences
 
 import android.content.Context
-import com.example.stormlight.data.datastore.StormLightPreferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import com.example.stormlight.data.model.UserPrefrences
+import com.example.stormlight.data.prefrences.datasource.local.PreferencesLocalDataSource
 import com.example.stormlight.utilities.enums.Language
 import com.example.stormlight.utilities.enums.TemperatureUnit
 import com.example.stormlight.utilities.enums.ThemeMode
@@ -11,8 +11,8 @@ import com.example.stormlight.utilities.enums.WindSpeedUnit
 import com.example.stormlight.utilities.enums.LocationSource
 
 class PrefrencesRepository(private val context: Context) {
-    private val localDataSource = StormLightPreferencesDataStore(context)
-    val userPreferences: Flow<UserPrefrences> = localDataSource.userPrefrencesFlow
+    private val localDataSource = PreferencesLocalDataSource(context)
+    val userPreferences: Flow<UserPrefrences> = localDataSource.userPreferences
 
     suspend fun setLanguage(language: Language) = localDataSource.setLanguage(language)
     suspend fun setThemeMode(themeMode: ThemeMode) = localDataSource.setThemeMode(themeMode)
