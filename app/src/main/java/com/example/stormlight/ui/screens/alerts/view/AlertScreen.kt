@@ -69,6 +69,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stormlight.R
+import com.example.stormlight.alarmmanager.StormLightAlarmSchedulerImpl
 import com.example.stormlight.data.alerts.local.AlertLocalDataSourceImpl
 import com.example.stormlight.data.alerts.repository.AlertRepositoryImpl
 import com.example.stormlight.data.db.StormLightDatabase
@@ -91,7 +92,9 @@ fun AlertsScreen(
                     StormLightDatabase.getInstance(context).alertDao()
                 )
             ),
-        )
+            alertScheduler = StormLightAlarmSchedulerImpl(context)
+
+    )
     )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()

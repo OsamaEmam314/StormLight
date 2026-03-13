@@ -1,5 +1,7 @@
 package com.example.stormlight.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -12,6 +14,7 @@ import com.example.stormlight.ui.screens.home.view.HomeScreen
 import com.example.stormlight.ui.screens.settings.view.SettingsScreen
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
