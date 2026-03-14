@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -36,6 +37,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -88,11 +90,29 @@ class MainActivity : ComponentActivity() {
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
         if (granted) fetchAndSaveGpsLocation()
     }
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+        } else {
 
-    private fun requestLocationIfNeeded() {
+        }
+    }
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val hasPermission = ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if (!hasPermission) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+    private fun requestLocationIfNeeded(isGPS: Boolean) {
         CoroutineScope(Dispatchers.IO).launch {
-            val prefs = repository.userPreferences.first()
-            if (prefs.locationSource == LocationSource.GPS) {
+            if (isGPS) {
                 if (PermissionUtils.hasLocationPermission(applicationContext)) {
                     fetchAndSaveGpsLocation()
                 } else {
@@ -128,12 +148,14 @@ class MainActivity : ComponentActivity() {
         handleAlarmIntent(intent)
         super.onCreate(savedInstanceState)
         NotificationHelper.createNotificationChannels(this)
-
         enableEdgeToEdge()
-        requestLocationIfNeeded()
+
 
         setContent {
             val prefs by mainViewModel.userPrefs.collectAsStateWithLifecycle()
+            requestLocationIfNeeded(prefs.locationSource == LocationSource.GPS)
+            requestNotificationPermission()
+
             LaunchedEffect(prefs.language) {
                 val currentLocale = AppCompatDelegate.getApplicationLocales().toLanguageTags()
                 if (currentLocale != prefs.language.language) {

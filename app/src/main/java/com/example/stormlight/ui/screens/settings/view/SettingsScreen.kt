@@ -1,6 +1,10 @@
 package com.example.stormlight.ui.screens.settings.view
 
+import android.app.Activity
+import android.content.Intent
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stormlight.R
 import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.ui.screens.map.MapPickerActivity
 import com.example.stormlight.ui.screens.settings.viewmodel.SettingsViewModel
 import com.example.stormlight.ui.screens.settings.viewmodel.SettingsViewModelFactory
 import com.example.stormlight.utilities.enums.Language
@@ -40,8 +45,26 @@ fun SettingsScreen() {
     val repository = PrefrencesRepository(context)
     val viewModel = viewModel<SettingsViewModel>(factory = SettingsViewModelFactory(repository))
     val prefs by viewModel.userPrefrencesState.collectAsState()
-    LaunchedEffect(prefs) {
-        Log.d("pref", "UI State Updated: $prefs")
+    val mapLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val lat = result.data?.getDoubleExtra(MapPickerActivity.EXTRA_LAT, 0.0) ?: 0.0
+            val lon = result.data?.getDoubleExtra(MapPickerActivity.EXTRA_LON, 0.0) ?: 0.0
+            val cityName = result.data
+                ?.getStringExtra(MapPickerActivity.EXTRA_CITY_NAME)
+                .orEmpty()
+             viewModel.setLatLong(lat, lon)
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is SettingsUiEvent.NavigateToMap -> {
+                    mapLauncher.launch(Intent(context, MapPickerActivity::class.java))
+                }
+            }
+        }
     }
     Column(
         modifier = Modifier
@@ -62,6 +85,9 @@ fun SettingsScreen() {
                 },
                 onSelect = {
                     viewModel.setLocationSource(it)
+                    if (it == LocationSource.Map) {
+                        viewModel.onMapClicked()
+                    }
                 }
             )
         }

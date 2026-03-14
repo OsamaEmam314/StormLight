@@ -189,7 +189,9 @@ fun MapPickerScreen(
                     setTileSource(TileSourceFactory.MAPNIK)
                     setMultiTouchControls(true)
                     controller.setZoom(14.0)
-                    controller.setCenter(GeoPoint(30.0333, 31.4833))
+                    val lat = prefs.lat.toDoubleOrNull() ?: 0.0
+                    val lon = prefs.lon.toDoubleOrNull() ?: 0.0
+                    controller.setCenter(GeoPoint(lat, lon))
 
                     val tapReceiver = object : MapEventsReceiver {
                         override fun singleTapConfirmedHelper(p: GeoPoint): Boolean {
