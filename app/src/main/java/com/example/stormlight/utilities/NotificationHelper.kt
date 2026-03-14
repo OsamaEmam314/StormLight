@@ -161,13 +161,16 @@ object NotificationHelper {
 
         val openAppIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("EXTRA_STOP_ALARM", true)
+            putExtra("ALERT_ID", alertId)
         }
         val openAppPendingIntent = PendingIntent.getActivity(
-            context, alertId, openAppIntent,
+            context,
+            alertId + 20_000,
+            openAppIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // BigTextStyle — shows full weather info when expanded
         val expandedText = buildString {
             if (message.isNotBlank()) {
                 append(message)
@@ -189,11 +192,12 @@ object NotificationHelper {
                     .bigText(expandedText)
                     .setBigContentTitle(context.getString(R.string.alarm_title))
             )
-            .setAutoCancel(false)
-            .setOngoing(true)
+            .setAutoCancel(true)
+            .setOngoing(false)
+            .setContentIntent(openAppPendingIntent)
+            .setDeleteIntent(snoozePendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
-            .setContentIntent(openAppPendingIntent)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .addAction(
                 android.R.drawable.ic_media_pause,
@@ -209,7 +213,6 @@ object NotificationHelper {
 
         notificationManager.notify(alertId, notification)
     }
-
     private fun buildWeatherLine(context: Context, temp: String, weatherDesc: String): String {
         return listOf(weatherDesc, temp)
             .filter { it.isNotBlank() }

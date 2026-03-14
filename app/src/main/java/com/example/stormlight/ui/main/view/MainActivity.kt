@@ -1,6 +1,9 @@
 package com.example.stormlight.ui.main.view
 
 import android.Manifest
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -54,6 +57,22 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleAlarmIntent(intent)
+    }
+
+    private fun handleAlarmIntent(intent: Intent) {
+        if (intent.getBooleanExtra("EXTRA_STOP_ALARM", false)) {
+            val alertId = intent.getIntExtra("ALERT_ID", -1)
+            NotificationHelper.stopAlarmSound()
+            if (alertId != -1) {
+                val notificationManager =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.cancel(alertId)
+            }
+        }
+    }
     private val repository by lazy {
         PrefrencesRepository(
             applicationContext
@@ -106,7 +125,7 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-
+        handleAlarmIntent(intent)
         super.onCreate(savedInstanceState)
         NotificationHelper.createNotificationChannels(this)
 
@@ -227,5 +246,6 @@ fun StormLightApp() {
             modifier = Modifier.padding(innerPadding),
         )
     }
+
 }
 

@@ -66,6 +66,7 @@ import com.example.stormlight.data.prefrences.PrefrencesRepository
 import com.example.stormlight.data.weather.local.WeatherLocalDataSource
 import com.example.stormlight.data.weather.remote.WeatherRemoteDataSource
 import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
+import com.example.stormlight.ui.screens.details.FavoriteDetailActivity
 import com.example.stormlight.ui.screens.favorites.viewmodel.FavViewModel
 import com.example.stormlight.ui.screens.favorites.viewmodel.FavViewModelFactory
 import com.example.stormlight.ui.screens.map.MapPickerActivity
@@ -124,10 +125,10 @@ fun FavoritesScreen(
                 }
 
                 is FavoritesUiEvent.NavigateToDetail -> {
-                 /*   val intent = Intent(context, FavoriteDetailActivity::class.java).apply {
+                    val intent = Intent(context, FavoriteDetailActivity::class.java).apply {
                         putExtra(FavoriteDetailActivity.EXTRA_LOC, event.loc)
                     }
-                    context.startActivity(intent)*/
+                    context.startActivity(intent)
                 }
             }
         }
@@ -139,7 +140,7 @@ fun FavoritesScreen(
         val favToDelete = currentState.favorites.firstOrNull { it.loc == locToDelete }
         if (favToDelete != null) {
             ConfirmDeleteDialog(
-                cityName = favToDelete.loc,
+                cityName = favToDelete.currentWeather.localNames?.get(currentState.prefs.language.language) ?: favToDelete.loc,
                 onDismiss = { pendingDelete = null },
                 onConfirm = {
                     viewModel.removeFavorite(favToDelete)
@@ -251,6 +252,8 @@ fun FavoriteItem(
     onClick: () -> Unit,
     onDelete: () -> Unit,
 ) {
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
             if (value == SwipeToDismissBoxValue.EndToStart) {
@@ -264,6 +267,8 @@ fun FavoriteItem(
 
     SwipeToDismissBox(
         state = dismissState,
+        enableDismissFromStartToEnd = false,
+        enableDismissFromEndToStart = true,
         backgroundContent = {
             Box(
                 modifier = Modifier
@@ -271,10 +276,7 @@ fun FavoriteItem(
                     .padding(vertical = 6.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.errorContainer),
-                contentAlignment = if (LocalLayoutDirection.current == LayoutDirection.Ltr)
-                    Alignment.CenterEnd
-                else
-                    Alignment.CenterStart
+                contentAlignment = Alignment.CenterEnd
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
@@ -295,7 +297,6 @@ fun FavoriteItem(
         )
     }
 }
-
 @Composable
 private fun FavoriteCard(
     favWeather: FavWeather,
@@ -308,9 +309,16 @@ private fun FavoriteCard(
         val offsetMillis = favWeather.currentWeather.timezone * 1000L
         sdf.format(Date(System.currentTimeMillis() + offsetMillis))
     }
+    val tempDisplay = UnitUtils.formatTemp(
+        celsius = favWeather.currentWeather.main.temp,
+        unit = prefs.temperatureUnit.symbol
+    )
 
-    val tempDisplay = "${favWeather.temp.roundToInt()}${UnitUtils.tempSymbol(prefs.temperatureUnit)}"
     val iconCode = favWeather.currentWeather.weather.firstOrNull()?.icon.orEmpty()
+
+    val langCode = prefs.language.language
+    val cityName = favWeather.currentWeather.localNames?.get(langCode)
+        ?: favWeather.currentWeather.name.ifBlank { favWeather.loc }
 
     Surface(
         modifier = Modifier
@@ -329,7 +337,7 @@ private fun FavoriteCard(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    text = favWeather.loc,
+                    text = cityName,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface

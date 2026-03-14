@@ -20,6 +20,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StormLight">
         <activity
+            android:name=".ui.screens.details.FavoriteDetailActivity"
+            android:exported="false"
+            android:label="@string/title_activity_favorite_detail"
+            android:theme="@style/Theme.StormLight" />
+        <activity
             android:name=".ui.screens.map.MapPickerActivity"
             android:exported="false"
             android:label="@string/title_activity_map_picker"
@@ -39,6 +44,8 @@
         <receiver android:name=".alarmmanager.AlertReceiver" />
         <receiver android:name=".alarmmanager.DismissAlarmReceiver" />
         <receiver android:name=".alarmmanager.SnoozeAlarmReceiver" />
+        <receiver android:name=".alarmmanager.OpenAppAlarmReceiver" />
+
 
         <meta-data
             android:name="preloaded_fonts"
