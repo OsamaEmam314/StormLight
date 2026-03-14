@@ -29,9 +29,7 @@ fun AppNavGraph(
             HomeScreen()
         }
         composable(route = StormlightDestinations.Favorites.route) {
-            FavoritesScreen(
-
-            )
+            FavoritesScreen()
         }
         composable(route = StormlightDestinations.Alerts.route) {
             AlertsScreen()

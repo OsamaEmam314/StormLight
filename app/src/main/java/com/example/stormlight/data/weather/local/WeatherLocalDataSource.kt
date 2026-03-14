@@ -2,6 +2,7 @@ package com.example.stormlight.data.weather.local
 
 import com.example.stormlight.data.datastore.WeatherDataStore
 import com.example.stormlight.data.model.CurrentWeatherDto
+import com.example.stormlight.data.model.FavWeather
 import com.example.stormlight.data.model.ForecastDto
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.map
 
 class WeatherLocalDataSource(
     private val weatherDataStore: WeatherDataStore,
+    private val favoriteDao: FavoriteDao,
     private val gson: Gson = Gson()
 ) : LocalDataSource {
     override suspend fun saveCurrentWeather(dto: CurrentWeatherDto) {
@@ -41,4 +43,22 @@ class WeatherLocalDataSource(
     override suspend fun clearCache() {
         weatherDataStore.clear()
     }
+
+    override fun getAllFavorites(): Flow<List<FavWeather>> =
+        favoriteDao.getAllFavorites()
+
+    override suspend fun insertFavorite(favWeather: FavWeather) =
+        favoriteDao.insertFavorite(favWeather)
+
+    override suspend fun updateFavorite(favWeather: FavWeather) =
+        favoriteDao.updateFavorite(favWeather)
+
+    override suspend fun deleteFavorite(favWeather: FavWeather) =
+        favoriteDao.deleteFavorite(favWeather)
+
+    override suspend fun isFavorite(lat: Double, lon: Double): Boolean =
+        favoriteDao.isFavorite(lat, lon)
+
+    override suspend fun getFavoriteByLoc(loc: String): FavWeather? =
+        favoriteDao.getFavoriteByLoc(loc)
 }

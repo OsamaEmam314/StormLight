@@ -114,5 +114,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.kotlinx.serialization.json)
+    implementation("org.osmdroid:osmdroid-android:6.1.18")
 
 }
