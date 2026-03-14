@@ -86,4 +86,7 @@
     <string name="notification_title">تنبيه طقس ستورم لايت</string>
     <string name="alarm_title">منبه ستورم لايت</string>
     <string name="alarm_dismiss">إيقاف</string>
+    <string name="delete_fav_title">حذف المفضلة</string>
+    <string name="delete_fav_message">هل تريد حذف %1$s من المفضلة؟</string>
+    <string name="action_remove">حذف</string>
 </resources>

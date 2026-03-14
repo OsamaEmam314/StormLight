@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stormlight.R
 import com.example.stormlight.data.datastore.WeatherDataStore
+import com.example.stormlight.data.db.StormLightDatabase
 import com.example.stormlight.data.network.RetrofitClient
 import com.example.stormlight.data.prefrences.PrefrencesRepository
 import com.example.stormlight.data.weather.local.WeatherLocalDataSource
@@ -61,7 +62,9 @@ fun HomeScreen(
                     RetrofitClient.weatherApiService
                 ),
                 WeatherLocalDataSource(
-                    WeatherDataStore(context)
+                    WeatherDataStore(context),
+                    StormLightDatabase.getInstance(context).favoriteDao()
+
                 )
             ),
             prefrencesRepository = PrefrencesRepository(context)

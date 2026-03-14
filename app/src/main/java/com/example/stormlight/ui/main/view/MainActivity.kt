@@ -29,6 +29,7 @@ import com.example.stormlight.ui.theme.StormLightTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -162,6 +163,16 @@ fun StormLightApp() {
                     title = {
                         Text(
                             text = stringResource(R.string.nav_alerts),
+                        )
+                    },
+
+                    )
+            }
+            if (destTitle == StormlightDestinations.Favorites.route) {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(R.string.nav_favorites),
                         )
                     },
 

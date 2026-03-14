@@ -19,7 +19,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StormLight">
-
+        <activity
+            android:name=".ui.screens.map.MapPickerActivity"
+            android:exported="false"
+            android:label="@string/title_activity_map_picker"
+            android:theme="@style/Theme.StormLight" />
         <activity
             android:name=".ui.main.view.MainActivity"
             android:exported="true"

@@ -85,4 +85,9 @@
     <string name="notification_title">StormLight Weather Alert</string>
     <string name="alarm_title">StormLight Alarm</string>
     <string name="alarm_dismiss">Dismiss</string>
+
+    <string name="delete_fav_title">Remove Favorite</string>
+    <string name="delete_fav_message">Remove %1$s from favorites?</string>
+    <string name="action_remove">Remove</string>
+    <string name="title_activity_map_picker">MapPickerActivity</string>
 </resources>

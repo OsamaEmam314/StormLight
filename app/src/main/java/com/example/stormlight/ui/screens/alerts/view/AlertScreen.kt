@@ -104,7 +104,9 @@ fun AlertsScreen(
                     RetrofitClient.weatherApiService
                 ),
                 WeatherLocalDataSource(
-                    WeatherDataStore(context)
+                    WeatherDataStore(context),
+                    StormLightDatabase.getInstance(context).favoriteDao()
+
                 )
             ),
             prefrencesRepository = PrefrencesRepository(context)
