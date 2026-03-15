@@ -3,12 +3,13 @@ package com.example.stormlight.ui.screens.details.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.IPrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.repository.WeatherRepository
 
 class FavoriteDetailViewModelFactory(
     private val weatherRepository: WeatherRepository,
-    private val prefrencesRepository: PrefrencesRepository,
+    private val prefrencesRepository: IPrefrencesRepository,
     private val loc: String
 ) : ViewModelProvider.Factory {
 

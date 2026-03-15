@@ -28,7 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stormlight.R
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.datastore.StormLightPreferencesDataStore
+import com.example.stormlight.data.prefrences.local.PreferencesLocalDataSource
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.ui.screens.map.MapPickerActivity
 import com.example.stormlight.ui.screens.settings.viewmodel.SettingsViewModel
 import com.example.stormlight.ui.screens.settings.viewmodel.SettingsViewModelFactory
@@ -42,7 +44,11 @@ import com.example.stormlight.utilities.enums.WindSpeedUnit
 @Composable
 fun SettingsScreen() {
     val context = LocalContext.current
-    val repository = PrefrencesRepository(context)
+    val repository = PrefrencesRepository(
+        PreferencesLocalDataSource(
+            StormLightPreferencesDataStore(context)
+        )
+    )
     val viewModel = viewModel<SettingsViewModel>(factory = SettingsViewModelFactory(repository))
     val prefs by viewModel.userPrefrencesState.collectAsState()
     val mapLauncher = rememberLauncherForActivityResult(
@@ -54,7 +60,7 @@ fun SettingsScreen() {
             val cityName = result.data
                 ?.getStringExtra(MapPickerActivity.EXTRA_CITY_NAME)
                 .orEmpty()
-             viewModel.setLatLong(lat, lon)
+            viewModel.setLatLong(lat, lon)
         }
     }
     LaunchedEffect(Unit) {

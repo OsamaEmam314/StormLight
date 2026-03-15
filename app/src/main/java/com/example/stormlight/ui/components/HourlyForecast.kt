@@ -1,4 +1,4 @@
-package com.example.stormlight.ui.screens.home.components.forecast
+package com.example.stormlight.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

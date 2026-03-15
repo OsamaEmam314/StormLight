@@ -11,5 +11,6 @@ sealed class HomeUiState {
         val forecast: ForecastDto,
         val userPrefrences: UserPrefrences
     ) : HomeUiState()
+
     data class Error(val message: String) : HomeUiState()
 }

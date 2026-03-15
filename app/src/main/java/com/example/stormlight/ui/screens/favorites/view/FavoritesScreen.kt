@@ -57,12 +57,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.stormlight.R
+import com.example.stormlight.data.datastore.StormLightPreferencesDataStore
 import com.example.stormlight.data.datastore.WeatherDataStore
 import com.example.stormlight.data.db.StormLightDatabase
 import com.example.stormlight.data.model.FavWeather
 import com.example.stormlight.data.model.UserPrefrences
 import com.example.stormlight.data.network.RetrofitClient
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.local.PreferencesLocalDataSource
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.local.WeatherLocalDataSource
 import com.example.stormlight.data.weather.remote.WeatherRemoteDataSource
 import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
@@ -92,7 +94,11 @@ fun FavoritesScreen(
                     StormLightDatabase.getInstance(context).favoriteDao()
                 )
             ),
-            prefrencesRepository = PrefrencesRepository(context)
+            prefrencesRepository = PrefrencesRepository(
+                PreferencesLocalDataSource(
+                    StormLightPreferencesDataStore(context)
+                )
+            )
         )
     )
 
@@ -121,7 +127,7 @@ fun FavoritesScreen(
                     snackbarHostState.showSnackbar(event.message)
 
                 is FavoritesUiEvent.NavigateToMap -> {
-                   mapLauncher.launch(Intent(context, MapPickerActivity::class.java))
+                    mapLauncher.launch(Intent(context, MapPickerActivity::class.java))
                 }
 
                 is FavoritesUiEvent.NavigateToDetail -> {
@@ -140,7 +146,8 @@ fun FavoritesScreen(
         val favToDelete = currentState.favorites.firstOrNull { it.loc == locToDelete }
         if (favToDelete != null) {
             ConfirmDeleteDialog(
-                cityName = favToDelete.currentWeather.localNames?.get(currentState.prefs.language.language) ?: favToDelete.loc,
+                cityName = favToDelete.currentWeather.localNames?.get(currentState.prefs.language.language)
+                    ?: favToDelete.loc,
                 onDismiss = { pendingDelete = null },
                 onConfirm = {
                     viewModel.removeFavorite(favToDelete)
@@ -297,6 +304,7 @@ fun FavoriteItem(
         )
     }
 }
+
 @Composable
 private fun FavoriteCard(
     favWeather: FavWeather,

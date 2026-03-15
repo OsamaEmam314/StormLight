@@ -9,7 +9,8 @@ import com.example.stormlight.alarmmanager.StormLightAlarmScheduler
 import com.example.stormlight.data.alerts.repository.AlertRepository
 import com.example.stormlight.data.model.AlertEntity
 import com.example.stormlight.data.model.AlertItem
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.IPrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.repository.WeatherRepository
 import com.example.stormlight.ui.screens.alerts.view.AlertUiState
 import com.example.stormlight.ui.screens.alerts.view.CreateAlertDialogState
@@ -31,7 +32,7 @@ class AlertViewModel(
     private val alertRepository: AlertRepository,
     private val alertScheduler: StormLightAlarmScheduler,
     private val weatherRepository: WeatherRepository,
-    private val prefrencesRepository: PrefrencesRepository
+    private val prefrencesRepository: IPrefrencesRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AlertUiState())

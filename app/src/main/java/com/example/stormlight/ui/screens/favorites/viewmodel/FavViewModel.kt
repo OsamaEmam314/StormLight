@@ -3,7 +3,8 @@ package com.example.stormlight.ui.screens.favorites.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stormlight.data.model.FavWeather
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.IPrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.repository.WeatherRepository
 import com.example.stormlight.ui.screens.favorites.view.FavUiState
 import com.example.stormlight.ui.screens.favorites.view.FavoritesUiEvent
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 
 class FavViewModel(
     private val weatherRepository: WeatherRepository,
-    private val prefrencesRepository: PrefrencesRepository
+    private val prefrencesRepository: IPrefrencesRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<FavUiState>(FavUiState.Loading)
@@ -76,7 +77,12 @@ class FavViewModel(
             }
 
             weatherRepository
-                .getFavoriteWeather(lat, lon, cityName, prefrencesRepository.userPreferences.first().language.language)
+                .getFavoriteWeather(
+                    lat,
+                    lon,
+                    cityName,
+                    prefrencesRepository.userPreferences.first().language.language
+                )
                 .collect { resource ->
                     when (resource) {
                         is Resource.Loading -> Unit
@@ -84,6 +90,7 @@ class FavViewModel(
                             _uiEvent.emit(
                                 FavoritesUiEvent.ShowSnackbar("$cityName added to favorites")
                             )
+
                         is Resource.Error ->
                             _uiEvent.emit(
                                 FavoritesUiEvent.ShowSnackbar(

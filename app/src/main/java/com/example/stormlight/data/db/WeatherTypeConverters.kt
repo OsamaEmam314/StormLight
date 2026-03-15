@@ -1,12 +1,10 @@
 package com.example.stormlight.data.db
 
-import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.example.stormlight.data.model.CurrentWeatherDto
 import com.example.stormlight.data.model.ForecastDto
 import com.google.gson.Gson
 
-@ProvidedTypeConverter
 class WeatherTypeConverters {
     private val gson = Gson()
 

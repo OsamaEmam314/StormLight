@@ -34,10 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stormlight.R
+import com.example.stormlight.data.datastore.StormLightPreferencesDataStore
 import com.example.stormlight.data.datastore.WeatherDataStore
 import com.example.stormlight.data.db.StormLightDatabase
 import com.example.stormlight.data.network.RetrofitClient
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.local.PreferencesLocalDataSource
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.local.WeatherLocalDataSource
 import com.example.stormlight.data.weather.remote.WeatherRemoteDataSource
 import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
@@ -45,7 +47,7 @@ import com.example.stormlight.ui.components.CurrentWeatherHeader
 import com.example.stormlight.ui.components.CurrentWeatherHero
 import com.example.stormlight.ui.components.MetricsGrid
 import com.example.stormlight.ui.components.DailyForecast
-import com.example.stormlight.ui.screens.home.components.forecast.HourlyForecast
+import com.example.stormlight.ui.components.HourlyForecast
 import com.example.stormlight.ui.screens.home.viewmodel.HomeViewModel
 import com.example.stormlight.ui.screens.home.viewmodel.HomeViewModelFactory
 
@@ -67,7 +69,11 @@ fun HomeScreen(
 
                 )
             ),
-            prefrencesRepository = PrefrencesRepository(context)
+            prefrencesRepository = PrefrencesRepository(
+                PreferencesLocalDataSource(
+                    StormLightPreferencesDataStore(context)
+                )
+            )
         )
     )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

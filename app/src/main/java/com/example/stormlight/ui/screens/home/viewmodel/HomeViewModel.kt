@@ -5,7 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.stormlight.data.model.CurrentWeatherDto
 import com.example.stormlight.data.model.ForecastDto
 import com.example.stormlight.data.model.UserPrefrences
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.IPrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.repository.WeatherRepository
 import com.example.stormlight.ui.screens.home.view.HomeUiState
 import com.example.stormlight.utilities.Resource
@@ -21,7 +22,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val weatherRepository: WeatherRepository,
-    private val prefrencesRepository: PrefrencesRepository
+    private val prefrencesRepository: IPrefrencesRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)

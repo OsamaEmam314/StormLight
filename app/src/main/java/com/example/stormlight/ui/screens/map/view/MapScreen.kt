@@ -38,12 +38,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stormlight.R
+import com.example.stormlight.data.datastore.StormLightPreferencesDataStore
 import com.example.stormlight.data.datastore.WeatherDataStore
 import com.example.stormlight.data.db.StormLightDatabase
 import com.example.stormlight.data.model.GeoLocationDto
 import com.example.stormlight.data.model.UserPrefrences
 import com.example.stormlight.data.network.RetrofitClient
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.local.PreferencesLocalDataSource
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.local.WeatherLocalDataSource
 import com.example.stormlight.data.weather.remote.WeatherRemoteDataSource
 import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
@@ -76,7 +78,11 @@ fun MapPickerScreen(
                     StormLightDatabase.getInstance(context).favoriteDao()
                 )
             ),
-            prefrencesRepository = PrefrencesRepository(context)
+            prefrencesRepository = PrefrencesRepository(
+                PreferencesLocalDataSource(
+                    StormLightPreferencesDataStore(context)
+                )
+            )
         )
     )
     val prefs by viewModel.prefs.collectAsState(initial = UserPrefrences())
@@ -189,8 +195,8 @@ fun MapPickerScreen(
                     setTileSource(TileSourceFactory.MAPNIK)
                     setMultiTouchControls(true)
                     controller.setZoom(14.0)
-                    val lat = prefs.lat.toDoubleOrNull() ?: 0.0
-                    val lon = prefs.lon.toDoubleOrNull() ?: 0.0
+                    val lat = 30.0
+                    val lon = 31.0
                     controller.setCenter(GeoPoint(lat, lon))
 
                     val tapReceiver = object : MapEventsReceiver {
@@ -201,6 +207,7 @@ fun MapPickerScreen(
                             keyboardController?.hide()
                             return true
                         }
+
                         override fun longPressHelper(p: GeoPoint): Boolean = false
                     }
                     overlays.add(MapEventsOverlay(tapReceiver))

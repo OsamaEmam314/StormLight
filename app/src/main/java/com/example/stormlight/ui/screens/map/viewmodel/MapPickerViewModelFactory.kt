@@ -2,12 +2,13 @@ package com.example.stormlight.ui.screens.map.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.IPrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.repository.WeatherRepository
 
 class MapPickerViewModelFactory(
     private val weatherRepository: WeatherRepository,
-    private val prefrencesRepository: PrefrencesRepository
+    private val prefrencesRepository: IPrefrencesRepository
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")

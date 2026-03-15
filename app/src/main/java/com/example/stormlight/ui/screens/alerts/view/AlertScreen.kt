@@ -72,11 +72,13 @@ import com.example.stormlight.R
 import com.example.stormlight.alarmmanager.StormLightAlarmSchedulerImpl
 import com.example.stormlight.data.alerts.local.AlertLocalDataSourceImpl
 import com.example.stormlight.data.alerts.repository.AlertRepositoryImpl
+import com.example.stormlight.data.datastore.StormLightPreferencesDataStore
 import com.example.stormlight.data.datastore.WeatherDataStore
 import com.example.stormlight.data.db.StormLightDatabase
 import com.example.stormlight.data.model.AlertEntity
 import com.example.stormlight.data.network.RetrofitClient
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.local.PreferencesLocalDataSource
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.local.WeatherLocalDataSource
 import com.example.stormlight.data.weather.remote.WeatherRemoteDataSource
 import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
@@ -109,7 +111,11 @@ fun AlertsScreen(
 
                 )
             ),
-            prefrencesRepository = PrefrencesRepository(context)
+            prefrencesRepository = PrefrencesRepository(
+                PreferencesLocalDataSource(
+                    StormLightPreferencesDataStore(context)
+                )
+            )
 
         )
     )

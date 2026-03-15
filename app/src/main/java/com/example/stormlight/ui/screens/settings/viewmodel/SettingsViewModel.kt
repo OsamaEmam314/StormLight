@@ -2,8 +2,9 @@ package com.example.stormlight.ui.screens.settings.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.model.UserPrefrences
+import com.example.stormlight.data.prefrences.repository.IPrefrencesRepository
 import com.example.stormlight.ui.screens.settings.view.SettingsUiEvent
 import com.example.stormlight.utilities.enums.Language
 import com.example.stormlight.utilities.enums.TemperatureUnit
@@ -20,7 +21,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 
 class SettingsViewModel(
-    private val repository: PrefrencesRepository
+    private val repository: IPrefrencesRepository
 ) : ViewModel() {
     val userPrefrencesState: StateFlow<UserPrefrences> = repository.userPreferences
         .stateIn(
@@ -33,7 +34,7 @@ class SettingsViewModel(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-    val uiEvent : SharedFlow<SettingsUiEvent> = _uiEvent.asSharedFlow()
+    val uiEvent: SharedFlow<SettingsUiEvent> = _uiEvent.asSharedFlow()
 
     fun setLanguage(language: Language) {
         viewModelScope.launch {
@@ -58,12 +59,14 @@ class SettingsViewModel(
     fun setWindSpeedUnit(unit: WindSpeedUnit) {
         viewModelScope.launch { repository.setWindSpeedUnit(unit) }
     }
-    fun onMapClicked(){
+
+    fun onMapClicked() {
         viewModelScope.launch {
             repository.setLocationSource(LocationSource.Map)
             _uiEvent.emit(SettingsUiEvent.NavigateToMap)
         }
     }
+
     fun setLatLong(lat: Double, lon: Double) {
         viewModelScope.launch {
             repository.setLatitude(lat.toString())

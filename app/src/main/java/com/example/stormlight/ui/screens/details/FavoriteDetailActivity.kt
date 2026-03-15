@@ -10,7 +10,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.datastore.StormLightPreferencesDataStore
+import com.example.stormlight.data.prefrences.local.PreferencesLocalDataSource
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.ui.main.viewmodel.MainViewModel
 import com.example.stormlight.ui.main.viewmodel.MainViewModelFactory
 import com.example.stormlight.ui.screens.details.view.FavoriteDetailScreen
@@ -30,7 +32,11 @@ class FavoriteDetailActivity : ComponentActivity() {
 
         setContent {
             val mainViewModel: MainViewModel = viewModel(
-                factory = MainViewModelFactory(PrefrencesRepository(applicationContext))
+                factory = MainViewModelFactory(PrefrencesRepository(
+                    PreferencesLocalDataSource(
+                        StormLightPreferencesDataStore(applicationContext)
+                    )
+                ))
             )
             val prefs by mainViewModel.userPrefs.collectAsStateWithLifecycle()
 
@@ -40,7 +46,7 @@ class FavoriteDetailActivity : ComponentActivity() {
             }
             StormLightTheme(darkTheme = darkTheme) {
                 Scaffold()
-                {innerPadding ->
+                { innerPadding ->
                     FavoriteDetailScreen(
                         loc = loc,
                         onBack = { finish() },

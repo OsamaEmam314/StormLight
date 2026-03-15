@@ -213,6 +213,7 @@ object NotificationHelper {
 
         notificationManager.notify(alertId, notification)
     }
+
     private fun buildWeatherLine(context: Context, temp: String, weatherDesc: String): String {
         return listOf(weatherDesc, temp)
             .filter { it.isNotBlank() }

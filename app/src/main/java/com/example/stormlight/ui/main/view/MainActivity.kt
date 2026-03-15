@@ -33,7 +33,6 @@ import com.example.stormlight.ui.theme.StormLightTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -41,13 +40,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.work.WorkManager
 import com.example.stormlight.R
-import com.example.stormlight.alarmmanager.WeatherAlertWorkerFactory
+import com.example.stormlight.data.datastore.StormLightPreferencesDataStore
 import com.example.stormlight.data.datastore.WeatherDataStore
 import com.example.stormlight.data.db.StormLightDatabase
 import com.example.stormlight.data.network.RetrofitClient
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.local.PreferencesLocalDataSource
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.local.WeatherLocalDataSource
 import com.example.stormlight.data.weather.remote.WeatherRemoteDataSource
 import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
@@ -63,7 +62,6 @@ import com.example.stormlight.utilities.enums.LocationSource
 import com.example.stormlight.utilities.enums.ThemeMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -83,9 +81,12 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     private val repository by lazy {
         PrefrencesRepository(
-            applicationContext
+            PreferencesLocalDataSource(
+                StormLightPreferencesDataStore(applicationContext)
+            )
         )
     }
     private val mainViewModel: MainViewModel by viewModels {
@@ -116,6 +117,7 @@ class MainActivity : ComponentActivity() {
 
         }
     }
+
     private fun requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val hasPermission = ContextCompat.checkSelfPermission(
@@ -128,6 +130,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     private fun requestLocationIfNeeded(isGPS: Boolean) {
         CoroutineScope(Dispatchers.IO).launch {
             if (isGPS) {
@@ -167,18 +170,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         NotificationHelper.createNotificationChannels(this)
         enableEdgeToEdge()
-        val workerFactory = WeatherAlertWorkerFactory(
-            weatherRepository = weatherRepository,
-            preferencesRepository = repository
-        )
-
-        WorkManager.initialize(
-            this,
-            androidx.work.Configuration.Builder()
-                .setWorkerFactory(workerFactory)
-                .build()
-        )
-
 
         setContent {
             val prefs by mainViewModel.userPrefs.collectAsStateWithLifecycle()
@@ -299,4 +290,3 @@ fun StormLightApp() {
     }
 
 }
-

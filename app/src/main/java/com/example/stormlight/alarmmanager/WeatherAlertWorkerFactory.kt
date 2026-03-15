@@ -4,12 +4,13 @@ import android.content.Context
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.IPrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.repository.WeatherRepository
 
 class WeatherAlertWorkerFactory(
     private val weatherRepository: WeatherRepository,
-    private val preferencesRepository: PrefrencesRepository
+    private val preferencesRepository: IPrefrencesRepository
 ) : WorkerFactory() {
     override fun createWorker(
         appContext: Context,

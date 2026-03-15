@@ -3,7 +3,8 @@ package com.example.stormlight.alarmmanager
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.IPrefrencesRepository
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.repository.WeatherRepository
 import com.example.stormlight.utilities.NotificationHelper
 import com.example.stormlight.utilities.Resource
@@ -14,7 +15,7 @@ class WeatherAlertWorker(
     private val context: Context,
     workerParams: WorkerParameters,
     private val weatherRepository: WeatherRepository,
-    private val preferencesRepository: PrefrencesRepository
+    private val preferencesRepository: IPrefrencesRepository
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result {
         val alertId = inputData.getInt("ALERT_ID", -1)

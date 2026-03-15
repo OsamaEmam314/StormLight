@@ -32,10 +32,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.stormlight.data.datastore.StormLightPreferencesDataStore
 import com.example.stormlight.data.datastore.WeatherDataStore
 import com.example.stormlight.data.db.StormLightDatabase
 import com.example.stormlight.data.network.RetrofitClient
-import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.prefrences.local.PreferencesLocalDataSource
+import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.data.weather.local.WeatherLocalDataSource
 import com.example.stormlight.data.weather.remote.WeatherRemoteDataSource
 import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
@@ -46,7 +48,7 @@ import com.example.stormlight.ui.components.MetricsGrid
 import com.example.stormlight.ui.screens.details.viewmodel.FavoriteDetailViewModel
 import com.example.stormlight.ui.screens.details.viewmodel.FavoriteDetailViewModelFactory
 
-import com.example.stormlight.ui.screens.home.components.forecast.HourlyForecast
+import com.example.stormlight.ui.components.HourlyForecast
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,7 +68,11 @@ fun FavoriteDetailScreen(
                     StormLightDatabase.getInstance(context).favoriteDao()
                 )
             ),
-            prefrencesRepository = PrefrencesRepository(context),
+            prefrencesRepository = PrefrencesRepository(
+                PreferencesLocalDataSource(
+                    StormLightPreferencesDataStore(context)
+                )
+            ),
             loc = loc
         )
     )
@@ -96,6 +102,7 @@ fun FavoriteDetailScreen(
                 message = state.message,
                 onRetry = { viewModel.refresh() }
             )
+
             is FavDetailUiState.Success -> DetailSuccessState(state = state)
         }
     }
