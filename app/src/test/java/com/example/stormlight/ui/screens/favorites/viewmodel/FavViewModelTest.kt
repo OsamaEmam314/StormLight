@@ -41,7 +41,9 @@ class FavViewModelTest {
     private fun fakeFavWeather(loc: String = "Cairo") = mockk<FavWeather>(relaxed = true) {
         every { this@mockk.loc } returns loc
     }
+
     private val defaultPrefs = UserPrefrences(language = Language.ENGLISH)
+
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
@@ -51,6 +53,7 @@ class FavViewModelTest {
         every { prefrencesRepository.userPreferences } returns flowOf(defaultPrefs)
         viewModel = FavViewModel(weatherRepository, prefrencesRepository)
     }
+
     @After
     fun tearDown() {
         Dispatchers.resetMain()
@@ -70,6 +73,7 @@ class FavViewModelTest {
             // THEN — repository.removeFavorite was called exactly once
             coVerify(exactly = 1) { weatherRepository.removeFavorite(cairo) }
         }
+
     @Test
     fun removeFavorite_given_existing_favorite_when_called_then_emits_snackbar_with_loc_name() =
         runTest {
@@ -126,6 +130,7 @@ class FavViewModelTest {
                 `is`("Cairo is already in favorites")
             )
         }
+
     @Test
     fun onLocationConfirmed_given_already_favorite_when_called_then_getFavoriteWeather_never_called() =
         runTest {
