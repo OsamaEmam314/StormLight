@@ -122,12 +122,12 @@ class WeatherRepositoryImpl(
             if (cached == null) emit(Resource.Error(e.message ?: "Could not load favorite weather"))
         }
     }
+
     override fun getAllFavorites(): Flow<List<FavWeather>> =
         localDataSource.getAllFavorites()
 
     override suspend fun addFavorite(favWeather: FavWeather) =
         localDataSource.insertFavorite(favWeather)
-
 
 
     override suspend fun removeFavorite(favWeather: FavWeather) =

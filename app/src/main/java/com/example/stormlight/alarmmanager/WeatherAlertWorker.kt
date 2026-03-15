@@ -15,7 +15,7 @@ class WeatherAlertWorker(
     workerParams: WorkerParameters,
     private val weatherRepository: WeatherRepository,
     private val preferencesRepository: PrefrencesRepository
-) : CoroutineWorker(context, workerParams){
+) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result {
         val alertId = inputData.getInt("ALERT_ID", -1)
         if (alertId == -1) return Result.failure()

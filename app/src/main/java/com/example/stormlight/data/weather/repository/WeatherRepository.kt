@@ -30,6 +30,7 @@ interface WeatherRepository {
         loc: String,
         lang: String
     ): Flow<Resource<FavWeather>>
+
     fun getAllFavorites(): Flow<List<FavWeather>>
     suspend fun addFavorite(favWeather: FavWeather)
     suspend fun removeFavorite(favWeather: FavWeather)

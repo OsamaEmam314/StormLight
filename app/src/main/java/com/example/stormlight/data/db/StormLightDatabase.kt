@@ -11,7 +11,7 @@ import com.example.stormlight.data.model.FavWeather
 import com.example.stormlight.data.weather.local.FavoriteDao
 
 @Database(
-    entities = [AlertEntity::class , FavWeather::class ],
+    entities = [AlertEntity::class, FavWeather::class],
     version = 2,
     exportSchema = false
 )
@@ -20,6 +20,7 @@ abstract class StormLightDatabase : RoomDatabase() {
     abstract fun alertDao(): AlertDao
 
     abstract fun favoriteDao(): FavoriteDao
+
     companion object {
         const val DATABASE_NAME = "stormlight_db"
         private var instance: StormLightDatabase? = null

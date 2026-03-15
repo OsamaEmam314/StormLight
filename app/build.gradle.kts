@@ -29,8 +29,8 @@ android {
             "OWM_API_KEY",
             "\"${localProperties.getProperty("OWM_API_KEY") ?: ""}\""
         )
-        // buildConfigField("String", "OWM_API_KEY", "\"${project.findProperty("OWM_API_KEY") ?: ""}\"")
-        // buildConfigField("String", "MAPS_API_KEY", "\"${project.findProperty("MAPS_API_KEY") ?: ""}\"")
+        // buildConfigField("String", "OWM_API_KEY", "\"${project.findProperty("OWM_API_KEY") ?: ""}\")
+        // buildConfigField("String", "MAPS_API_KEY", "\"${project.findProperty("MAPS_API_KEY") ?: ""}\")
 
     }
 
@@ -64,6 +64,14 @@ android {
         generateLocaleConfig = true
         localeFilters += listOf("en", "ar")
     }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/LICENSE.md"
+            excludes += "/META-INF/LICENSE-notice.md"
+        }
+    }
 }
 
 dependencies {
@@ -90,7 +98,6 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.compose.ui.test)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.work.runtime.ktx)
@@ -103,17 +110,19 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.arch.core.testing)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockk)
+    testImplementation(libs.hamcrest)
     testImplementation(libs.androidx.room.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.work.testing)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.kotlinx.serialization.json)
+    androidTestImplementation(libs.mockk.android)
     implementation("org.osmdroid:osmdroid-android:6.1.18")
 
 }
