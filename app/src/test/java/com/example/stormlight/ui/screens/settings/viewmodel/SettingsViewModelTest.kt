@@ -40,6 +40,7 @@ class SettingsViewModelTest {
         }
         viewModel = SettingsViewModel(repository)
     }
+
     @After
     fun tearDown() {
         Dispatchers.resetMain()
@@ -58,6 +59,7 @@ class SettingsViewModelTest {
             // THEN — repository received DARK exactly once
             coVerify(exactly = 1) { repository.setThemeMode(ThemeMode.DARK) }
         }
+
     @Test
     fun setThemeMode_given_light_theme_when_called_then_does_not_call_dark() = runTest {
         // GIVEN — repository is ready to accept LIGHT
@@ -71,6 +73,7 @@ class SettingsViewModelTest {
         coVerify(exactly = 1) { repository.setThemeMode(ThemeMode.LIGHT) }
         coVerify(exactly = 0) { repository.setThemeMode(ThemeMode.DARK) }
     }
+
     @Test
     fun setThemeMode_given_dark_theme_when_called_twice_then_repository_called_twice() = runTest {
         // GIVEN
@@ -142,6 +145,7 @@ class SettingsViewModelTest {
         // THEN — LocationSource updated to Map
         coVerify(exactly = 1) { repository.setLocationSource(LocationSource.Map) }
     }
+
     @Test
     fun onMapClicked_given_user_taps_map_when_called_then_never_sets_GPS_location_source() =
         runTest {

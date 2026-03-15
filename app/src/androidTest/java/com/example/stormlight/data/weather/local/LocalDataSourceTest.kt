@@ -132,6 +132,7 @@ class LocalDataSourceTest {
             assertThat("List size must be 1", list.size, `is`(1))
             assertThat("Inserted loc must be Cairo", list[0].loc, `is`("Cairo"))
         }
+
     @Test
     fun insertFavorite_given_two_cities_when_both_inserted_then_getAllFavorites_returns_both() =
         runTest {
@@ -164,6 +165,7 @@ class LocalDataSourceTest {
         val list = localDataSource.getAllFavorites().first()
         assertThat("List must be empty after delete", list.isEmpty(), `is`(true))
     }
+
     @Test
     fun deleteFavorite_given_two_entries_when_one_deleted_then_only_the_other_remains() = runTest {
         // GIVEN — Cairo and Alexandria both inserted
