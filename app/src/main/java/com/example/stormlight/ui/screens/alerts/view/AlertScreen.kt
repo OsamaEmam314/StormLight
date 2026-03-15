@@ -69,6 +69,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stormlight.R
+import com.example.stormlight.StormLightApplication
 import com.example.stormlight.alarmmanager.StormLightAlarmSchedulerImpl
 import com.example.stormlight.data.alerts.local.AlertLocalDataSourceImpl
 import com.example.stormlight.data.alerts.repository.AlertRepositoryImpl

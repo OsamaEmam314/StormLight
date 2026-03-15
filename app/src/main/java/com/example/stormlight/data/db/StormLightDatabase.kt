@@ -32,6 +32,7 @@ abstract class StormLightDatabase : RoomDatabase() {
                     DATABASE_NAME
                 )
                     .fallbackToDestructiveMigration()
+                    .addTypeConverter(WeatherTypeConverters())
                     .build()
                 instance = newInstance
                 newInstance
