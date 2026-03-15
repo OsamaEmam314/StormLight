@@ -44,8 +44,16 @@
         <receiver android:name=".alarmmanager.AlertReceiver" />
         <receiver android:name=".alarmmanager.DismissAlarmReceiver" />
         <receiver android:name=".alarmmanager.SnoozeAlarmReceiver" />
-        <receiver android:name=".alarmmanager.OpenAppAlarmReceiver" />
-
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
 
         <meta-data
             android:name="preloaded_fonts"

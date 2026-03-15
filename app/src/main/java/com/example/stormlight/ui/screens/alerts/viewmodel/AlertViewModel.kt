@@ -107,33 +107,6 @@ class AlertViewModel(
             alertRepository.addAlert(alert)
             val inserted = alertRepository.getAlertByTime(state.selectedHour, state.selectedMinute)
             if (inserted != null) {
-                val prefs = prefrencesRepository.userPreferences.first()
-                val lat = prefs.lat.toDoubleOrNull()
-                val lon = prefs.lon.toDoubleOrNull()
-
-                var temp = ""
-                var weatherDesc = ""
-                var weatherIcon = ""
-
-                if (lat != null && lon != null) {
-                    val weatherResult = weatherRepository
-                        .getCurrentWeather(lat, lon, prefs.language.language)
-                        .first { it !is Resource.Loading }
-
-                    if (weatherResult is Resource.Success) {
-                        val data = weatherResult.data
-                        val convertedTemp = UnitUtils.convertTemp(
-                            data.main.temp,
-                            prefs.temperatureUnit.symbol
-                        ).toInt()
-                        val symbol = UnitUtils.tempSymbol(prefs.temperatureUnit)
-                        temp = "$convertedTemp$symbol"
-                        weatherDesc = data.weather.firstOrNull()?.description
-                            ?.replaceFirstChar { it.uppercase() }
-                            .orEmpty()
-                        weatherIcon = data.weather.firstOrNull()?.icon.orEmpty()
-                    }
-                }
                 alertScheduler.scheduleAlert(
                     AlertItem(
                         id = inserted.id,
@@ -141,10 +114,7 @@ class AlertViewModel(
                         type = inserted.type,
                         message = inserted.label,
                         hour = inserted.hour,
-                        minute = inserted.minute,
-                        temp = temp,
-                        weatherDesc = weatherDesc,
-                        weatherIcon = weatherIcon
+                        minute = inserted.minute
                     )
                 )
             }

@@ -41,8 +41,16 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.work.WorkManager
 import com.example.stormlight.R
+import com.example.stormlight.alarmmanager.WeatherAlertWorkerFactory
+import com.example.stormlight.data.datastore.WeatherDataStore
+import com.example.stormlight.data.db.StormLightDatabase
+import com.example.stormlight.data.network.RetrofitClient
 import com.example.stormlight.data.prefrences.PrefrencesRepository
+import com.example.stormlight.data.weather.local.WeatherLocalDataSource
+import com.example.stormlight.data.weather.remote.WeatherRemoteDataSource
+import com.example.stormlight.data.weather.repository.WeatherRepositoryImpl
 import com.example.stormlight.ui.AppNavGraph
 import com.example.stormlight.ui.main.viewmodel.MainViewModel
 import com.example.stormlight.ui.main.viewmodel.MainViewModelFactory
@@ -83,6 +91,16 @@ class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModelFactory(repository)
     }
+    val weatherRepository by lazy {
+        WeatherRepositoryImpl(
+            WeatherRemoteDataSource(RetrofitClient.weatherApiService),
+            WeatherLocalDataSource(
+                WeatherDataStore(this),
+                StormLightDatabase.getInstance(this).favoriteDao()
+            )
+        )
+    }
+
     private val locationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
@@ -149,6 +167,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         NotificationHelper.createNotificationChannels(this)
         enableEdgeToEdge()
+        val workerFactory = WeatherAlertWorkerFactory(
+            weatherRepository = weatherRepository,
+            preferencesRepository = repository
+        )
+
+        WorkManager.initialize(
+            this,
+            androidx.work.Configuration.Builder()
+                .setWorkerFactory(workerFactory)
+                .build()
+        )
 
 
         setContent {

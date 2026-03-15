@@ -8,10 +8,7 @@ data class AlertItem(
     val id: Int,
     val triggerAtMillis: Long,
     val type: AlertType,
+    val message: String,
     val hour: Int,
-    val minute: Int,
-    val temp: String = "",
-    val weatherDesc: String = "",
-    val weatherIcon: String = "",
-    val message: String
+    val minute: Int
 )

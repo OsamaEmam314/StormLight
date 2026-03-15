@@ -4,6 +4,9 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.stormlight.data.model.AlertItem
 import com.example.stormlight.utilities.Constants
 import com.example.stormlight.utilities.NotificationHelper
@@ -17,9 +20,6 @@ class SnoozeAlarmReceiver : BroadcastReceiver() {
         val message = intent.getStringExtra("ALERT_message") ?: return
         val hour = intent.getIntExtra("ALERT_hour", -1)
         val minute = intent.getIntExtra("ALERT_minute", -1)
-        val temp = intent.getStringExtra("ALERT_temp").orEmpty()
-        val weatherDesc = intent.getStringExtra("ALERT_weather_desc").orEmpty()
-        val weatherIcon = intent.getStringExtra("ALERT_weather_icon").orEmpty()
 
         NotificationHelper.stopAlarmSound()
 
@@ -34,10 +34,7 @@ class SnoozeAlarmReceiver : BroadcastReceiver() {
                 type = AlertType.ALARM,
                 message = message,
                 hour = hour,
-                minute = minute,
-                temp = temp,
-                weatherDesc = weatherDesc,
-                weatherIcon = weatherIcon
+                minute = minute
             )
         )
     }

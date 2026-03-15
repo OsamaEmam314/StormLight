@@ -23,9 +23,6 @@ class StormLightAlarmSchedulerImpl(
             putExtra("ALERT_type", alert.type == AlertType.NOTIFICATION)
             putExtra("ALERT_hour", alert.hour)
             putExtra("ALERT_minute", alert.minute)
-            putExtra("ALERT_temp", alert.temp)
-            putExtra("ALERT_weather_desc", alert.weatherDesc)
-            putExtra("ALERT_weather_icon", alert.weatherIcon)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(

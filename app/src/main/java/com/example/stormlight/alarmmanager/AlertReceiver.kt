@@ -7,6 +7,10 @@ import com.example.stormlight.data.model.AlertItem
 import com.example.stormlight.utilities.NotificationHelper
 import com.example.stormlight.utilities.enums.AlertType
 import java.util.Calendar
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+
 
 class AlertReceiver : BroadcastReceiver() {
 
@@ -17,19 +21,20 @@ class AlertReceiver : BroadcastReceiver() {
         val isNotification = intent.getBooleanExtra("ALERT_type", true)
         val hour = intent.getIntExtra("ALERT_hour", -1)
         val minute = intent.getIntExtra("ALERT_minute", -1)
-        val temp = intent.getStringExtra("ALERT_temp").orEmpty()
-        val weatherDesc = intent.getStringExtra("ALERT_weather_desc").orEmpty()
-        val weatherIcon = intent.getStringExtra("ALERT_weather_icon").orEmpty()
 
-        if (isNotification) {
-            NotificationHelper.sendNotification(
-                context, alertId, message, temp, weatherDesc, weatherIcon
-            )
-        } else {
-            NotificationHelper.sendAlarm(
-                context, alertId, message, hour, minute, temp, weatherDesc, weatherIcon
-            )
-        }
+        val inputData = Data.Builder()
+            .putInt("ALERT_ID", alertId)
+            .putString("ALERT_message", message)
+            .putBoolean("ALERT_type", isNotification)
+            .putInt("ALERT_hour", hour)
+            .putInt("ALERT_minute", minute)
+            .build()
+
+        val workRequest = OneTimeWorkRequestBuilder<WeatherAlertWorker>()
+            .setInputData(inputData)
+            .build()
+
+        WorkManager.getInstance(context).enqueue(workRequest)
 
         if (hour != -1 && minute != -1) {
             val tomorrowMillis = Calendar.getInstance().apply {
@@ -44,13 +49,13 @@ class AlertReceiver : BroadcastReceiver() {
                 AlertItem(
                     id = alertId,
                     triggerAtMillis = tomorrowMillis,
-                    type = if (isNotification) AlertType.NOTIFICATION else AlertType.ALARM,
+                    type = if (isNotification)
+                        AlertType.NOTIFICATION
+                    else
+                        AlertType.ALARM,
                     message = message,
                     hour = hour,
-                    minute = minute,
-                    temp = temp,
-                    weatherDesc = weatherDesc,
-                    weatherIcon = weatherIcon
+                    minute = minute
                 )
             )
         }
