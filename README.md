@@ -8,7 +8,7 @@ A modern Android weather application built with **Kotlin + Jetpack Compose**, fo
 
 - **Home Screen** — Current weather with temperature, humidity, wind speed, pressure, visibility, and cloud coverage. Includes hourly forecast for today and a 5-day outlook.
 - **Favorites Screen** — Save multiple locations via map or city search. Tap any favorite to view its full forecast details.
-- **Weather Alerts Screen** — Schedule custom weather alerts with configurable duration and notification type (notification or alarm sound). Alerts are managed via WorkManager.
+- **Weather Alerts Screen** — Schedule custom weather alerts with configurable duration and notification type (notification or alarm sound). Alerts are managed via WorkManager and AlarmManager.
 - **Settings Screen** — Customize location source (GPS / Map), temperature unit (°C / °F / K), wind speed unit (m/s / mph), app language (Arabic / English), and theme (Light / Dark / System). All preferences are persisted with DataStore.
 
 ---
@@ -24,7 +24,7 @@ A modern Android weather application built with **Kotlin + Jetpack Compose**, fo
 | Local DB | Room |
 | Preferences | DataStore |
 | Async | Coroutines + Flow + StateFlow + SharedFlow |
-| Background Work | WorkManager |
+| Background Work | WorkManager + AlarmManager|
 | Image Loading | Coil |
 | Testing | JUnit + MockK |
 
@@ -83,11 +83,8 @@ The app fully supports **Arabic (RTL)** and **English (LTR)**. Language is chang
 ---
 
 ## Architecture Notes
-
-- No Domain Layer — ViewModels interact directly with Repository interfaces
 - All repositories and data sources are behind interfaces for testability
-- Every ViewModel has a dedicated `ViewModelProvider.Factory` declared inside its screen file
-- `!!` (non-null assertion) is never used throughout the codebase
+- Every ViewModel has a dedicated `ViewModelProvider.Factory` 
 - Preferences (theme, language, units, location) are all stored in DataStore and exposed as `Flow`
 
 ---
@@ -105,4 +102,4 @@ The app fully supports **Arabic (RTL)** and **English (LTR)**. Language is chang
 
 ## Unit Tests
 
-Unit tests cover ViewModels using MockK and `kotlinx-coroutines-test`. Tests are located under `app/src/test/`.
+Unit tests cover ViewModels using MockK and `kotlinx-coroutines-test`. 
