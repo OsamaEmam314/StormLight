@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -65,6 +66,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    private var gpsFetchedThisSession = false
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleAlarmIntent(intent)
@@ -102,13 +105,16 @@ class MainActivity : ComponentActivity() {
         )
     }
 
-    private val locationPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-        if (granted) fetchAndSaveGpsLocation()
+
+private val locationPermissionLauncher = registerForActivityResult(
+    ActivityResultContracts.RequestMultiplePermissions()
+) { permissions ->
+    val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+    if (granted && mainViewModel.userPrefs.value.locationSource == LocationSource.GPS) {
+        fetchAndSaveGpsLocation()
     }
+}
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -148,20 +154,21 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun fetchAndSaveGpsLocation() {
-        if (!LocationHelper.isLocationEnabled(this)) {
-            return
-        }
-        CoroutineScope(Dispatchers.IO).launch {
-            LocationHelper.getCurrentLocation(applicationContext).collect { latLon ->
-                if (latLon != null) {
-                    mainViewModel.setLatitude(latLon.lat.toString())
-                    mainViewModel.setLongitude(latLon.lon.toString())
-                }
 
+fun fetchAndSaveGpsLocation() {
+    if (gpsFetchedThisSession) return
+    if (!LocationHelper.isLocationEnabled(this)) return
+    gpsFetchedThisSession = true
+
+    CoroutineScope(Dispatchers.IO).launch {
+        LocationHelper.getCurrentLocation(applicationContext).collect { latLon ->
+            if (latLon != null) {
+                mainViewModel.setLatitude(latLon.lat.toString())
+                mainViewModel.setLongitude(latLon.lon.toString())
             }
         }
     }
+}
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -173,7 +180,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val prefs by mainViewModel.userPrefs.collectAsStateWithLifecycle()
-            requestLocationIfNeeded(prefs.locationSource == LocationSource.GPS)
+            val prefsLoaded by mainViewModel.prefsLoaded.collectAsStateWithLifecycle()
+
+            Log.d("Osama", "onCreate: $prefs")
+            if (prefsLoaded) {
+                LaunchedEffect(prefs.locationSource) {
+                    requestLocationIfNeeded(prefs.locationSource == LocationSource.GPS)
+                }
+            }
             requestNotificationPermission()
 
             LaunchedEffect(prefs.language) {

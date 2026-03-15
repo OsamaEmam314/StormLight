@@ -8,6 +8,7 @@ import com.example.stormlight.data.prefrences.repository.PrefrencesRepository
 import com.example.stormlight.utilities.enums.Language
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -20,7 +21,13 @@ class MainViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = UserPrefrences()
         )
-
+    val prefsLoaded: StateFlow<Boolean> = repository.userPreferences
+        .map { true }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = false
+        )
     fun setLatitude(lat: String) {
         viewModelScope.launch {
             repository.setLatitude(lat)
