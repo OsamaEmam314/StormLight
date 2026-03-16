@@ -38,11 +38,11 @@ class AlertReceiver : BroadcastReceiver() {
 
         if (hour != -1 && minute != -1) {
             val tomorrowMillis = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_YEAR, 1)
                 set(Calendar.HOUR_OF_DAY, hour)
                 set(Calendar.MINUTE, minute)
                 set(Calendar.SECOND, 0)
                 set(Calendar.MILLISECOND, 0)
+                add(Calendar.DAY_OF_YEAR, 1)
             }.timeInMillis
 
             StormLightAlarmSchedulerImpl(context).scheduleAlert(
